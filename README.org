@@ -1,1 +1,10 @@
-#+TITLE: Introduction to React
+#+TITLE: ST2615:
+#+SUBTITLE: A React and React Native Primer
+#+AUTHOR: Jing Yen Loh
+#+EMAIL: lohjingyen.16@ichat.sp.edu.sg
+#+DATE: April 2018
+
+* Abstract
+This report is to present the research that has been completed during the 16
+weeks of my ST2615: Independent Studies module. Chapter x blah blah blah
+* TODO Describe Chapters
