@@ -1,0 +1,32 @@
+#+TITLE: Chapter 1
+#+SUBTITLE: Hello, React!
+#+AUTHOR: Jing Yen Loh
+#+EMAIL: lohjingyen.16@ichat.sp.edu.sg
+#+DATE: April 2018
+
+#+BEGIN_QUOTE
+jQuery please -- Jing Yen Loh
+#+END_QUOTE
+
+* Learning Objectives
+** [ ] High level overview of React
+** [ ] Set up development environment for React
+
+* Hello, React
+Welcome to your first step in learning React.
+
+* Setting up a development environment for React
+Before we begin with the main course, you'll find it necessary to install
+several tools in order to complete the exercises as you work through this
+document.
+** Text editor
+A no brainer, as you'll be editing many text files (primarily JavaScript). My
+personal preference is [[https://code.visualstudio.com][Visual Studio Code]], an lightweight source code editor by
+Microsoft with excellent support for React/React Native development.
+
+Other popular alternatives include:
+- [[https://nuclide.io][Nuclide]], a package for the [[https://nuclide.io][Atom]] editor open-sourced and maintained by Facebook
+- [[https://www.sublimetext.com][Sublime Text]], a popular and fast source editor with support for many languages
+- [[https://en.wikipedia.org/wiki/Vim_(text_editor)][Vim]], a modal text editor
+** Node.js
+** Npm/Yarn
