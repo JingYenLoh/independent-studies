@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- We'll need React and react-dom -->
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <!-- Let's use babel as well so we can write Jsx :) -->
+  <script crossorigin src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  <title>React TodoList</title>
+</head>
+
+<body>
+
+  <!-- This is where the React app in this example will be! -->
+  <div id="app"></div>
+
+  <!-- Our React code -->
+  <script type="text/babel">
+  // App title
+  const Header = ({ todoCount, doneCount }) => <h1>Your tasks: {doneCount}/{todoCount}</h1>;
+
+  // Represents a single Todo Item
+  const TodoItem = ({ taskName, isDone, handleChange }) => (
+    <React.Fragment>
+      <span>{taskName}</span>
+      <input
+        type="checkbox"
+        checked={isDone}
+        onChange={handleChange}
+      />
+    </React.Fragment>
+  );
+
+  // Your input form to add a new Todo
+  const NewTodoForm = props => (
+    <form onSubmit={props.handleSubmit}>
+      <label for="taskName">
+        New task:
+        <input
+          name="taskName"
+          type="text"
+          value={props.taskName}
+          onChange={props.onTaskNameChange}
+        />
+      </label>
+      <input type="submit" value="Add TODO" />
+    </form>
+  );
+
+  // The Application base.
+  class MainApp extends React.Component {
+    constructor(props) {
+      super(props);
+      // In this example, `this.state` contains the state of our entire
+      // application.
+      this.state = {
+        newTaskName: "",
+        // This are some hardcoded todos
+        todos: [
+          { taskName: "Immutability helpers", isDone: true },
+          { taskName: "Not CDN", isDone: false },
+          { taskName: "Install things", isDone: false },
+          { taskName: "State management", isDone: false },
+        ]
+      };
+      this.updateTaskName = this.updateTaskName.bind(this);
+      this.addNewTodo = this.addNewTodo.bind(this);
+      this.toggleIsDone = this.toggleIsDone.bind(this);
+    }
+
+    // Adds a new entry into your TODO list
+    addNewTodo(event) {
+      event.preventDefault();
+      this.setState(state => ({
+        todos: [
+          // Construct a new anonymous object with a taskName and isDone
+          { taskName: state.newTaskName, isDone: false },
+          // ... is the object spread operator
+          ...state.todos
+        ]
+      }));
+      this.setState(() => ({ newTaskName: "" }));
+    }
+
+    updateTaskName({ target }) {
+      this.setState(() => ({ newTaskName: target.value }));
+    }
+
+    toggleIsDone(index) {
+      return ({ target }) => {
+        const todos = [...this.state.todos];
+        todos[index] = { ...this.state.todos[index], isDone: target.checked };
+        this.setState({ todos });
+      }
+    }
+
+    render() {
+      return (
+        <React.Fragment>
+          <Header
+            todoCount={this.state.todos.length}
+            doneCount={this.state.todos.filter(todo => todo.isDone).length} 
+          />
+          <NewTodoForm
+            taskName={this.state.newTaskName}
+            onTaskNameChange={this.updateTaskName}
+            handleSubmit={this.addNewTodo}
+          />
+          <ul>
+            {this.state.todos.map((todo, index) =>  
+              <li key={todo.taskName}>
+                <TodoItem
+                  taskName={todo.taskName}
+                  isDone={todo.isDone}
+                  handleChange={this.toggleIsDone(index)}
+                />
+              </li>
+            )}
+          </ul>
+        </React.Fragment>
+      );
+    }
+  }
+
+  // Render `MainApp` into the div with the id of "app"
+  ReactDOM.render(
+    <MainApp />,
+    document.getElementById("app")
+  );
+  </script>
+
+</body>
+
+</html>
