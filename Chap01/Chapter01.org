@@ -71,7 +71,7 @@ function TeaTable() {
         <td>100</td>
         <td>3 &#126; 5</td>
       </tr>
-        <td>Pu'er</td>
+        <td>Pu&#39;er</td>
         <td>100</td>
         <td>5 &#126; 5</td>
       </tr>
