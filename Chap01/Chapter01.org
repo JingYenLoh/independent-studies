@@ -127,4 +127,32 @@ Other popular alternatives include:
 - [[https://www.sublimetext.com][Sublime Text]], a popular and fast source editor with support for many languages
 - [[https://en.wikipedia.org/wiki/Vim_(text_editor)][Vim]], a modal text editor
 ** Node.js
-** Npm/Yarn
+Node.js is a JavaScript runtime built on Google Chrome's V8 JavaScript engine.
+
+A little elaboration on Node.js' role in React, or even modern frontend
+development. Traditionally, JavaScript runtimes are embedded and sandboxed
+within a browser. These runtimes are unable to perform actions such as modifying
+files in the filesystem directly, and for good reason: security. As JavaScript
+as a language got more popular, however, Node.js, a non-sandboxed JavaScript
+runtime was developed, allowing devs to write server-side code using JavaScript
+as well.
+
+With frontend development, Node.js isn't really used for running your end
+product. However, much of frontend tooling requires a JavaScript runtime, and
+that is where Node falls in for frontend development.
+** Npm
+"npm" stands for Node package manager. Node packages are little libraries that
+can be published. ~npm~ is a little program that manages these packages for you,
+allowing for ease of install and removal to a project, or your system. Something
+people new to Node and npm may not realize is that Node packages need not
+necessarily be written in JavaScript. Indeed, any folder with a valid
+~package.json~ qualifies as a Node module (although its usefulness is still
+debatable!). In fact, it is common for Node.js programs to be interfacing with
+low-level Node modules written in C.
+
+For React development, you'll likely be installing a whole bunch of modules from
+the npm registry, a giant repository for node modules published to the Internet.
+** TODO create-react(-native)-app
+
+It's possible to write React for the web with just a plain HTML page and a
+couple of ~script~ tags, but as the complexity of your application grows, 
