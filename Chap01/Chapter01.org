@@ -12,8 +12,106 @@ jQuery please -- Jing Yen Loh
 ** [ ] High level overview of React
 ** [ ] Set up development environment for React
 
-* Hello, React
-Welcome to your first step in learning React.
+* React?
+Welcome to your first step in learning React. In this introductory chapter,
+we'll give a high level overview of what React is, as well as provide
+instructions for simple React development setup.
+
+** What is React?
+The [[https://reactjs.org][React homepage]] describes React as "A JavaScript library for building user
+interfaces". We then see 3 major points: /Declarative/, /Component-Based/, and
+/Learn Once, Write Anywhere/. Scrolling further, we find several code samples
+and corresponding demos. Let's break down what everything means.
+
+"A JavaScript library for building user interfaces" is exactly what it means.
+Developed by Facebook, React is a general library written in JavaScript for
+building User Interfaces (UIs). On the React website, this corresponds to
+building web interfaces. Notice, however, that the description does not
+explicitly limit React for web development. Indeed, React has been decoupled
+from the web, and is capable of building UIs for mobile (React Native). In fact,
+projects such as [[https://microsoft.github.io/reactxp/][ReactXP]] allow the React code to be shared amongst multiple
+platforms such as web, iOS, Android, and Windows.
+
+React allows developers to write declarative UIs. When writing React code,
+rather than imperatively creating UI components via code, e.g. in Java's swing
+framework or .NET's Windows Forms, you usually declare your React UIs using JSX,
+an XML-like markup language. This JSX markup is passed to React, which figures
+out how to create the UIs imperatively for you. One advantage of declarative UIs
+is that it allows developers to better visualize the "shape" of their views and
+also improve readability, thus allowing for more predictability. And
+predictability always helps with debugging.
+
+React's model of building user interfaces is to allow creation of components,
+and composing these components to form a UI. Here's an simple example:
+
+#+BEGIN_SRC js
+// We build a component and name it TeaTable
+function TeaTable() {
+  return (
+    <table>
+      <tr>
+        <th>Types</th>
+        <th>Temperature (%#176;C)</th>
+        <th>Time (min)</th>
+      </tr>
+      <tr>
+        <td>White</td>
+        <td>80</td>
+        <td>2 &#126; 3</td>
+      </tr>
+        <td>Green</td>
+        <td>80</td>
+        <td>2 &#126; 3</td>
+      </tr>
+        <td>Oolong</td>
+        <td>90</td>
+        <td>3 &#126; 4</td>
+      </tr>
+        <td>Black</td>
+        <td>100</td>
+        <td>3 &#126; 5</td>
+      </tr>
+        <td>Pu'er</td>
+        <td>100</td>
+        <td>5 &#126; 5</td>
+      </tr>
+    </table>
+  );
+}
+
+// We build another component and call it TableLabel
+function TableLabel(label) {
+  return <h1>{label}<h1>;
+}
+
+// We then use/compose those 2 components in our app.
+// Notice App is simply another component. It could be
+// re-used in another componnent.
+function App() {
+  return (
+    <div>
+      <TableLabel label="Tea sipping guide" />
+      <TeaTable />
+    </div>
+  )
+}
+#+END_SRC
+
+The Java programming language had a slogan "Write once, run anywhere", referring
+to how Java code could be written once, and it could be run on any device with a
+Java Virtual Machine. With React, however, Facebook was of the opinion that
+different platforms should have different looks, feels, and capabilities, but
+the developers building the applications should be able to do so without
+learning a fundamentally different set of technologies for each. Thus, React's
+approach of "Learn once, write everywhere" allows engineers to target different
+platforms, but with a library that fundamentally uses the same principles
+regardless.
+
+/Side note: I was originally tasked by the school to do React Native for my
+independent studies. However, the above point is precisely the reason why I
+choose to keep this document focused on React, rather than React Native./
+
+** TODO How does React work?
 
 * Setting up a development environment for React
 Before we begin with the main course, you'll find it necessary to install
