@@ -117,13 +117,18 @@ several tools in order to complete the exercises as you work through this
 document.
 ** Text editor
 A no brainer, as you'll be editing many text files (primarily JavaScript). My
-personal preference is [[https://code.visualstudio.com][Visual Studio Code]], an lightweight source code editor by
-Microsoft with excellent support for React/React Native development.
+personal preference is [[https://code.visualstudio.com][Visual Studio Code]] (VSCode), an lightweight source code
+editor by Microsoft with excellent support for React/React Native development.
 
 Other popular alternatives include:
 - [[https://nuclide.io][Nuclide]], a package for the [[https://nuclide.io][Atom]] editor open-sourced and maintained by Facebook
 - [[https://www.sublimetext.com][Sublime Text]], a popular and fast source editor with support for many languages
-- [[https://en.wikipedia.org/wiki/Vim_(text_editor)][Vim]], a modal text editor
+- [[https://en.wikipedia.org/wiki/Vim_(text_editor)][Vim]], a modal text editor with powerful commands for text editing
+
+For the purposes of this report, only instructions for setting up VSCode will be
+provided.
+*** TODO Setting up Visual Studio Code
+VSCode is availble for download at [[https://code.visualstudio.com][the official website]].
 ** Node.js
 Node.js is a JavaScript runtime built on Google Chrome's V8 JavaScript engine.
 
