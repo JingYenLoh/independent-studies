@@ -107,9 +107,7 @@ approach of "Learn once, write everywhere" allows engineers to target different
 platforms, but with a library that fundamentally uses the same principles
 regardless.
 
-/Side note: I was originally tasked by the school to do React Native for my
-independent studies. However, the above point is precisely the reason why I
-choose to keep this document focused on React, rather than React Native./
+/Side note: I was originally tasked by the school to do React Native for my independent studies. However, the above point is precisely the reason why I choose to keep this document focused on React, rather than React Native./
 
 ** TODO How does React work?
 
