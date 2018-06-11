@@ -93,7 +93,7 @@ One of my favorite language features. Before we proceed, let's clear up some
 terminology. Here's a JavaScript Object.
 
 #+BEGIN_SRC js
-const francis = {
+const person = {
   name: 'Francis',
   gender: null
 }
@@ -106,6 +106,71 @@ a corresponding /value/.
 |--------+---------|
 | name   | Francis |
 | gender | null    |
+
+It's common to be writing code like the following:
+#+BEGIN_SRC js
+const name = person.name;
+#+END_SRC
+
+
+Destructuring allows you to extract the /key/ and assign it to a variable
+simultaneously:
+#+BEGIN_SRC js
+const { name } = person;
+#+END_SRC
+
+Multiple keys are fine too:
+#+BEGIN_SRC js
+const { name, gender } = person;
+#+END_SRC
+
+Destructuring works on Arrays as well:
+#+BEGIN_SRC js
+const [first, second, ...rest] = [1, 2, 3, 4, 5];
+
+console.log(first); // 1
+console.log(second); // 2
+console.log(rest); // [3, 4, 5]
+#+END_SRC
+
+As well as Modules, which we'll cover later. In fact, you'll frequently see the
+following examples in React:
+#+BEGIN_SRC js
+// You're extracting Component directly from the 'react' import
+import React, { Component } from 'react';
+
+class ButtonComponent extends Component {
+  // ...
+}
+#+END_SRC
+
+#+BEGIN_SRC js
+// Without the destructuring, it would be like the following:
+import React from 'react';
+
+class ButtonComponent extends React.Component {
+  // ...
+}
+#+END_SRC
+
+I particularly like destructuring function arguments, especially with React
+components:
+#+BEGIN_SRC js
+let TodoItem = ({ taskName, isDone }) => (
+  <li>
+    <p>{taskName}</p>
+    <input type="checkbox" value={isDone} />
+  </li>
+);
+
+// VERSUS
+TodoItem = (props) => (
+  <li>
+    <p>{props.taskName}</p>
+    <input type="checkbox" value={props.isDone} />
+  </li>
+);
+#+END_SRC
 ** Modules (not really ES6)
 ** Promises
 ** Thoughts
