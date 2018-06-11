@@ -161,6 +161,7 @@ to ~undefined~, as evidenced by the second ~greet~ call.
 We can override this default by providing a default parameter, which will be
 used instead when the argument is ~undefined~:
 #+BEGIN_SRC js
+// Default parameter of 'nameless'
 function greet(name = 'nameless') {
   console.log('Hello, ' + name + '!');
 }
