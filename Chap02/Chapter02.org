@@ -57,6 +57,89 @@ semicolons are still used, and even enforced for consistency.
 /Author's note: For a while I enjoyed writing JS without semicolons, but eventually succumbed to semicolons, which also allows for modern features while remaining error free. Perhaps more on that another time./
 *** Null and Undefined
 ** const and let
+Traditionally, the ~var~ keyword was used for variable declarations.
+#+BEGIN_SRC js
+var pi = 3.14;
+#+END_SRC
+
+~const~ prevents the value of the constant from being changed through /re-assignment/.
+#+BEGIN_SRC js
+const answerToUniverse = 42;
+
+try {
+  answerToUniverse = 99;
+  // expected output: TypeError: invalid assignment to const `number'
+  // Note - error messages will vary depending on browser
+} catch (e) {
+  console.err(e);
+}
+
+console.log(answerToUniverse);
+#+END_SRC
+
+However, ~const~ doesn't magically make the value immutable. You simply can't
+change the reference.
+#+BEGIN_SRC js
+const arr = [1, 2, 3, 4];
+
+arr.push(5); // Valid code
+
+console.log(arr); // [1, 2, 3, 4, 5];
+
+// The ... operator clones and spreads the properties in arr.
+const copy = [...arr, 6]; // [1, 2, 3, 4, 5, 6]
+
+arr = copy; // TypeError: Assignment to constant variable
+#+END_SRC
+
+~let~ works similarly to ~var~, allowing you to reassign references.
+#+BEGIN_SRC js
+let x = 1;
+console.log(x);
+
+x = 'chicken';
+console.log(x);
+#+END_SRC
+
+So if ~let~ works similarly, what's the purpose of it? Why not just use ~const~
+with ~var~?
+
+This is a bit of gotcha for JS beginners: variables in JS are actually /function
+scoped/, meaning a ~var~ declaration allows for the variable to be accessible
+within a function itself. That may have sounded confusing, so here's an example:
+
+#+BEGIN_SRC js
+function aThousand() {
+  for (var i = 0; i < 1000; i++) {
+    // Do nothing, just using a for loop to illustrate
+  }
+  console.log(i);
+}
+
+aThousand();
+#+END_SRC
+
+That actually outputs ~1000~, which was possible because the /scope/ of ~i~
+was the /function/(~aThousand~) itself. Contrast that to the following example
+in C:
+#+BEGIN_SRC csharp
+int aThousand()
+{
+    for (var i = 0; i < 1000; i++)
+    {
+        // Do nothing
+    }
+    Console.WriteLine(i); // The name 'i' does not exist in the current context
+}
+#+END_SRC
+
+That happens because ~i~ was /block scoped/, meaning that it existed within the
+curly braces (~{}~). Blocks are a much more common way to scope variables (C,
+C++, Java, C#, etc all use block scoping). Function scoping introduces a lot of
+gotchas for people unfamiliar with it in JS, and thus ~const~ and ~let~
+introduces block scoping to JS (besides ~const~'s immutable references).
+
+/Author's note: I use ~const~ almost exclusively, unless I know I'll explictly need a mutable reference, in which case I use ~let~. I find it helps me reason about my code better./
 ** Default Parameters
 Conceptually simple, but before that let's cover a JS beginner gotcha. Given the
 following function:
