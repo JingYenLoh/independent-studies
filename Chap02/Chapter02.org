@@ -56,6 +56,36 @@ semicolons are still used, and even enforced for consistency.
 
 /Author's note: For a while I enjoyed writing JS without semicolons, but eventually succumbed to semicolons, which also allows for modern features while remaining error free. Perhaps more on that another time./
 *** Null and Undefined
+In most programming languages, a ~null~ could refer to a value that does not
+exist or an uninitialized variable. In JS, it's slightly different.
+
+~undefined~ is a property without a definition. It typically means a variable
+that has been declared but not defined, or a non-existent property in an object.
+#+BEGIN_SRC js
+let x; // x is declared but not defined with a value
+
+console.log(x); // undefined
+
+x = {}; // We'll now assign an empty Object to x
+
+// x doesn't have a property called nonExistentProperty
+console.log(x.nonExistentProperty); // undefined
+#+END_SRC
+
+~null~, however, means /nothing/. Unlike ~undefined~, which undefined variables
+default to, ~null~ has to be assigned.
+#+BEGIN_SRC js
+let x; // x is declared but not defined with a value
+
+console.log(x); // undefined
+
+x = null;
+
+console.log(x); // null
+#+END_SRC
+
+Why both ~null~ and ~undefined~? AFAIK, this was a flaw in the design of the
+language, which is tricky to fix now.
 ** const and let
 Traditionally, the ~var~ keyword was used for variable declarations.
 #+BEGIN_SRC js
