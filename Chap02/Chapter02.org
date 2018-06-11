@@ -121,7 +121,7 @@ aThousand();
 
 That actually outputs ~1000~, which was possible because the /scope/ of ~i~ was
 the /function/ (~aThousand~) itself. Contrast that to the following example in
-C:
+C#:
 #+BEGIN_SRC csharp
 int aThousand()
 {
