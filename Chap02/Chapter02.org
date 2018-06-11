@@ -34,6 +34,19 @@ hole.
 Before even diving into modern JS, I feel the need to cover certain concepts and
 gotchas for beginners.
 *** ES...? Isn't this JavaScript?
+The short answer is JavaScript usually refers to ECMAScript (ES for short), and
+JS is simply the popular name to refer to ES. So that's something to bear in
+mind if you chance upon the term while reading some documentation.
+
+The long answer is ECMAScript is the Standard for the scripting language. ECMA
+stands for European Computer Manufacturer's Association, and ECMAScript is a
+standard they specified for a programming language. JavaScript is an
+implementation of the ECMAScript standard. The "Java" part actually came from
+marketing decision, and not really due to JS being a "script" version of the
+Java programming language.
+
+This is mostly trivia/history, but I've included it to avoid potential
+confusion.
 *** Semicolons
 In JavaScript, semicolons are optional. Unlike Java or C#, where statements are
 delimited by a semicolon, the JS interpreter can guess where to delimit a
