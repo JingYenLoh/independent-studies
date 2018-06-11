@@ -155,7 +155,20 @@ low-level Node modules written in C.
 
 For React development, you'll likely be installing a whole bunch of modules from
 the npm registry, a giant repository for node modules published to the Internet.
-** TODO create-react(-native)-app
-
+** create-react(-native)-app
 It's possible to write React for the web with just a plain HTML page and a
-couple of ~script~ tags, but as the complexity of your application grows, 
+couple of ~script~ tags, but as the complexity of your application grows, you'll
+probably end up using a lot more tooling and libraries. The React community
+maintains the command-line application for generating React apps with a lot of
+the tooling and integration setup, ~create-react-app~ for the web and
+~create-react-native-app~ for React Native. They're just a short npm install
+away:
+
+#+BEGIN_SRC sh
+# Note that we install them globally, because they're tools
+npm install -g create-react-app
+npm install -g create-react-native-app
+#+END_SRC
+
+More details on using them later, although they aren't complicated, nor are they
+intended to be.
