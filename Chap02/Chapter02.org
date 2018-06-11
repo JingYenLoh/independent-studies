@@ -1,0 +1,106 @@
+#+TITLE: Chapter 2
+#+SUBTITLE: Hello, Modern JS!
+#+AUTHOR: Jing Yen Loh
+#+EMAIL: lohjingyen.16@ichat.sp.edu.sg
+#+DATE: June 2018
+
+#+BEGIN_QUOTE
+(() => alert('ES2018+'))();
+#+END_QUOTE
+
+* Learning Objectives
+** [ ] Provide high level overview to modern JS syntax
+** [ ] Provide high level overview to tooling used in JS development
+
+* Introduction
+One major obstacle faced by Singapore Polytechnic's Diploma in Information
+Technology students when attempting to learn React, as I've observed, is not due
+to the complexity of the React library itself, which indeed is conceptually
+lightweight compared to some JavaScript UI libraries out there, but rather
+getting overwhelmed with new syntax and unfamiliar concepts. Indeed, oftentimes
+documentation often assumes some familiarity with frontend JS development, as
+React was not the first tool people reached for when building UIs. It is even
+possible that the reader has been overwhelmed by my initial chapter. At the time
+of writing, JavaScript is only briefly touched in the school's syllabus and is
+woefully inadequate to cope with the massive changes JS has seen over recent
+years. This chapter attempts to fill those gaps enough that the reader may at
+least read the React documentation without feeling like diving into a rabbit
+hole.
+
+/Author's note: I make effort to explain things to the best of my ability, but
+IMHO nothing quite beats diving into documentation and writing some code
+yourself. To that, I include necessary links in this Chapter, and I encourage
+them to be visited to clarify any doubts and solidify understanding./
+
+* ES6 and Beyond
+** Beginner Gotchas
+Before even diving into modern JS, I feel the need to cover certain concepts and
+gotchas for beginners.
+*** ES...? Isn't this JavaScript?
+*** Semicolons
+In JavaScript, semicolons are optional. Unlike Java or C#, where statements are
+delimited by a semicolon, the JS interpreter can guess where to delimit a
+statement. In fact, it is possible to write JS completely without semicolons,
+similar to programming languages such as Python. In practise, however,
+semicolons are still used, and even enforced for consistency.
+
+/Author's note: For a while I enjoyed writing JS without semicolons, but
+eventually succumbed to semicolons, which also allows for modern features while
+remaining error free. Perhaps more on that another time./
+*** Null and Undefined
+** const and let
+** Default Parameters
+Conceptually simple, but before that let's cover a JS beginner gotcha. Given the
+following function:
+
+#+BEGIN_SRC js
+function greet(name) {
+  console.log('Hello, ' + name + '!');
+}
+
+greet('Francis');
+greet();
+#+END_SRC
+
+The first call would log ~Hello, Francis!~ to the console. What happens when we
+call ~greet();~ though? Surprise: the code runs! In JS, it is possible to omit
+arguments to functions if you do not intend to use them, and they will default
+to ~undefined~, as evidenced by the second ~greet~ call.
+
+We can override this default by providing a default parameter, which will be
+used instead when the argument is ~undefined~:
+#+BEGIN_SRC js
+function greet(name = 'nameless') {
+  console.log('Hello, ' + name + '!');
+}
+
+greet();
+#+END_SRC
+
+The above would output ~Hello, nameless!~. Default parameters are great for
+leaving sane defaults in arguments that you know will be commonly passed.
+** Classes
+** Destructuring
+One of my favorite language features. Before we proceed, let's clear up some
+terminology. Here's a JavaScript Object.
+
+#+BEGIN_SRC js
+const francis = {
+  name: 'Francis',
+  gender: null
+}
+#+END_SRC
+
+~francis~ is an identifier for the Object, which consists of 2 /keys/, each with
+a corresponding /value/.
+
+| key    | value   |
+|--------+---------|
+| name   | Francis |
+| gender | null    |
+** Modules (not really ES6)
+** Promises
+** Thoughts
+That was indeed lengthy, but with covering all that, I hope that the reader will
+be able to dive into any React library with speed, and immediately be able to
+read the code.
