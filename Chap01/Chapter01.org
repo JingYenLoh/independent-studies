@@ -190,3 +190,6 @@ npm install -g create-react-native-app
 
 More details on using them later, although they aren't complicated, nor are they
 intended to be.
+
+And that's it! The following chapter, we cover some modern JavaScript and other
+tooling/jargon that'll pop up as you work with React.
