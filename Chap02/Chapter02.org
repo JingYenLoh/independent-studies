@@ -291,3 +291,39 @@ TodoItem = (props) => (
 That was indeed lengthy, but with covering all that, I hope that the reader will
 be able to dive into any React library with speed, and immediately be able to
 read the code.
+* Common tooling
+** Babel
+JavaScript is continually evolving as a language, and new features are
+constantly being added. /Proposals/ are written for new features, where it goes
+through several stages of a proposal process, and gets finalized into the
+language specifications if it gets accepted.
+
+Babel is a JavaScript compiler (some call it transpiler) which supports the
+latest language features. It takes in next generation JavaScript (with features
+that're currently in proposals and not part of the spec yet) and churns out
+JavaScript that's supported in browsers. Babel does this through plugins that
+transform the syntax.
+
+You're most likely already using Babel if you're using JSX. Babel takes
+something with JSX...
+#+BEGIN_SRC js
+const HelloComponent = <Text>Hello!</Text>;
+#+END_SRC
+
+and transforms it into something like this:
+#+BEGIN_SRC js
+const HelloComponent = React.createElement(
+  Text,
+  null,
+  "Hello!",
+);
+#+END_SRC
+
+Surprise! Turns out JSX isn't actually part of JavaScript, but rather a Babel
+enabled feature for you to write XML looking UIs which gets transpiled into
+JavaScript functions.
+
+Besides JSX, ~create-react(-native)-app~ generated projects usually incorporate
+some experimental languages features (a.k.a. still in proposal). At the time of
+writing, this includes features like [[https://github.com/tc39/proposal-static-class-features/][static class features]] and [[https://github.com/tc39/proposal-dynamic-import][dynamic import]].
+** TODO Webpack
