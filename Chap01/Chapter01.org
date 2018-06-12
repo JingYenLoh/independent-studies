@@ -5,7 +5,7 @@
 #+DATE: April 2018
 
 #+BEGIN_QUOTE
-jQuery please -- Jing Yen Loh
+No more JavaScript please -- Jing Yen Loh
 #+END_QUOTE
 
 * Learning Objectives
