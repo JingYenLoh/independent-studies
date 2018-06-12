@@ -342,8 +342,8 @@ import { TodosReducer as Todo } from './TodosReducer.js';
 #+END_SRC
 
 There are several nuances with modules, and frankly the [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import][MDN documentation]] covers
-it much better than my brief summary here. I encourage the reader to visit the
-documentation instead.
+it much better than my brief summary here. Rather than reinventing the wheel, I
+encourage the reader to visit the documentation instead.
 ** TODO Promises
 
 * Common tooling
