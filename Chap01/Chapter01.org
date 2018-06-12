@@ -127,8 +127,14 @@ Other popular alternatives include:
 
 For the purposes of this report, only instructions for setting up VSCode will be
 provided.
-*** TODO Setting up Visual Studio Code
-VSCode is availble for download at [[https://code.visualstudio.com][the official website]].
+*** Setting up Visual Studio Code
+VSCode is availble for download at [[https://code.visualstudio.com][the official website]]. The download button
+should already target your operating system.
+
+Not much to cover here: installation should be straightforward. You may want to
+spend some time briefly looking through the introductory videos and keyboard
+shortcuts for productivity, although I'll try to mention relevant shortcuts in
+future chapters where applicable.
 ** Node.js
 Node.js is a JavaScript runtime built on Google Chrome's V8 JavaScript engine.
 
