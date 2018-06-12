@@ -149,6 +149,16 @@ as well.
 With frontend development, Node.js isn't really used for running your end
 product. However, much of frontend tooling requires a JavaScript runtime, and
 that is where Node falls in for frontend development.
+
+Node.js is available for download and install at [[https://nodejs.org/en/][nodejs.org]]. You'll notice 2
+versions to download:
+
+#+ATTR_HTML: :width 600px
+[[file:node-download.jpg][Node.js download]]
+
+LTS stands for Long Term Support, and at the time of writing is at version
+8.11.2. I'd recommend installing the LTS versions, as the Current version, while
+supporting newer features, is likely less stable than LTS.
 ** Npm
 "npm" stands for Node package manager. Node packages are little libraries that
 can be published. ~npm~ is a little program that manages these packages for you,
@@ -161,6 +171,8 @@ low-level Node modules written in C.
 
 For React development, you'll likely be installing a whole bunch of modules from
 the npm registry, a giant repository for node modules published to the Internet.
+
+npm comes installed with Node.js, and additional setup should be unnecessary.
 ** create-react(-native)-app
 It's possible to write React for the web with just a plain HTML page and a
 couple of ~script~ tags, but as the complexity of your application grows, you'll
