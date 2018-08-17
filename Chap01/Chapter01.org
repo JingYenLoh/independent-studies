@@ -9,9 +9,9 @@ No more JavaScript please -- Jing Yen Loh
 #+END_QUOTE
 
 * Learning Objectives
-** [ ] High level overview of React
-** [ ] Set up development environment for React
-
+- [ ] High level overview of React
+- [X] Set up development environment for React
+  
 * React?
 Welcome to your first step in learning React. In this introductory chapter,
 we'll give a high level overview of what React is, as well as provide
@@ -109,7 +109,8 @@ regardless.
 
 /Side note: I was originally tasked by the school to do React Native for my independent studies. However, the above point is precisely the reason why I choose to keep this document focused on React, rather than React Native./
 
-** TODO How does React work?
+** Why React?
+
 
 * Setting up a development environment for React
 Before we begin with the main course, you'll find it necessary to install
