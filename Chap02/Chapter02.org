@@ -203,6 +203,150 @@ greet();
 The above would output ~Hello, nameless!~. Default parameters are great for
 leaving sane defaults in arguments that you know will be commonly passed.
 ** Classes
+JavaScript's inheritance system is /Prototype-based/, which is a rather unique
+aspect of the language. Unlike traditional class-based Object Oriented
+programming langugas such as Java or C#, all JS Objects extend, or inherit from
+a prototype, which in turn extends from its own prototype, and so on. This
+continued link is known as the /prototype chain/, and the final prototype in
+this link is ~null~.
+
+To illustrate the chain, let's create an object with a single property of ~name~.
+#+BEGIN_SRC javascript
+let francis = { name: 'Francis' };
+
+console.log(francis.name); // Francis
+#+END_SRC
+
+By using the ~{}~ syntax, the newly created ~francis~ has ~Object~ as its
+prototype. When we invoke the following:
+#+BEGIN_SRC javascript
+console.log(francis.toString()); // [object Object]
+#+END_SRC
+
+~francis~ itself doesn't have a method called ~toString~, so JavaScript goes up
+the prototype chain and the first thing it sees its ~Object~. ~Object~ does have
+a ~toString~ method, so that is invoked. Here's an illustration of what the
+prototype chain looks like:
+#+BEGIN_EXAMPLE
+francis ---> Object.prototype ---> null
+#+END_EXAMPLE
+
+If we were to define ~toString~ on ~francis~ itself, however, there wouldn't be
+a need to traverse up the prototype chain anymore. This could be viewed as
+something similar to method overriding in traditional class based OOP languages.
+#+BEGIN_SRC javascript
+francis.toString = function () {
+  return this.name;
+}
+
+console.log(francis.toString()); // Francis
+#+END_SRC
+
+Similarly, JS arrays inherit from an ~Array.prototype~, which in turn inherits
+from ~Object.prototype~, so the following would have a prototype chain of:
+#+BEGIN_SRC javascript
+const arr = ['francis', 'is', 'ajax'];
+// arr ---> Array.prototype ---> Object.prototype ---> null
+#+END_SRC
+
+To keep create objects with similar properties, we write functions with that
+bind properties and call the function with the ~new~ keyword. These functions
+are often called /constructor functions/. Here's an example ripped off from MDN:
+#+BEGIN_SRC javascript
+function Rectangle(height, width) {
+  this.height = height;
+  this.width = width;
+}
+#+END_SRC
+
+We then call the ~Rectangle~ function with the ~new~ keyword:
+#+BEGIN_SRC javascript
+// Creates a Rectangle object with height of 3 and width of 4
+const rectangle = new Rectangle(3, 4);
+
+console.log(rectangle.height); // 3
+console.log(rectangle.width); // 4
+#+END_SRC
+The ~new~ is necessary because it binds the context of ~this~ to the newly
+created object, and sets the ~constructor~ property of the created object to
+~Rectangle~. Without it, ~this~ actually refers to whatever is invoking it, and
+ends up adding ~height~ and ~width~ properties of 3 and 4 to it!
+
+If we modify the properties of ~Rectangle~ directly, the ~rectangle~ object will
+get the new properties as well:
+#+BEGIN_SRC javascript
+Rectangle.prototype.name = 'Rectangle';
+
+console.log(rectangle.name); // Rectangle
+#+END_SRC
+
+The ~class~ keyword, introduced in ES2015, is simply syntactic sugar over the
+existing prototype-based inheritance shown above. They actually caused a little
+controversy when introduced, as people believed it "hid" the prototype-based
+inheritance underneath from newer developers, something quite different from the
+standard class based OOP people have come to expect from the ~class~ keyword.
+
+My job here isn't to take a stance in the debate, but to give an overview of
+this language feature, since after all, React uses the class syntax for components.
+
+You can create classes using the ~class~ keyword:
+#+BEGIN_SRC javascript
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+
+  getArea() {
+    return this.height * this.width;
+  }
+}
+#+END_SRC
+
+Then instantiate an object of this class using the ~new~ keyword:
+#+BEGIN_SRC javascript
+let rectangle = new Rectangle(3, 4);
+
+console.log(rectangle.getArea()); // 12
+#+END_SRC
+
+You're able to ~extend~ from this class as well, which is similar to the classic
+inheritance from OO languages:
+#+BEGIN_SRC javascript
+class Square extends Rectangle {
+  constructor(sideLength) {
+    super(sideLength, sideLength);
+  }
+}
+#+END_SRC
+
+And objects of this class have the properties of the parent class as well:
+#+BEGIN_SRC javascript
+let square = new Square(4);
+
+console.log(square.getArea()); // 16
+#+END_SRC
+
+In React, you'll create your own components by extending the React ~Component~:
+#+BEGIN_SRC javascript
+import React from 'react';
+
+class MyCoolComponent extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>I'm a cool component!</h1>
+      </div>
+    );
+  }
+}
+#+END_SRC
+Underneath the hood, ~MyCoolComponent~ gets the properties of React's
+~Component~ class, which is how React knows how to work with your components. 
+
+There's a good deal I haven't covered about classes, but this should be enough
+for a working introduction to React. We'll learn more along the way.
+
 ** Destructuring
 One of my favorite language features. Before we proceed, let's clear up some
 terminology. Here's a JavaScript Object.
