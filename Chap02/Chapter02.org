@@ -170,7 +170,8 @@ C++, Java, C#, etc all use block scoping). Function scoping introduces a lot of
 gotchas for people unfamiliar with it in JS, and thus ~const~ and ~let~
 introduces block scoping to JS (besides ~const~'s immutable references).
 
-/Author's note: I use ~const~ almost exclusively, unless I know I'll explictly need a mutable reference, in which case I use ~let~. I find it helps me reason about my code better./
+/Author's note: I use/ ~const~ /almost exclusively, unless I know I'll explictly
+need a mutable reference, in which case I use/ ~let~ /. I find it helps me reason about my code better./
 ** Default Parameters
 Conceptually simple, but before that let's cover a JS beginner gotcha. Given the
 following function:
