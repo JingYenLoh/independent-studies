@@ -459,8 +459,6 @@ export default Math;
 // -- index.js
 import Math from './math.js'; // The default export is brought in
 
-const radius = 5;
-
 console.log(Math.areaOfCircle(5)); // 78.5375
 #+END_SRC
 
