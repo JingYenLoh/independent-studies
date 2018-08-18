@@ -1,0 +1,50 @@
+#+TITLE: Chapter03
+#+SUBTITLE: My First React App
+#+AUTHOR: Jing Yen Loh
+#+EMAIL: lohjingyen.16@ichat.sp.edu.sg
+#+DATE: June 2018
+
+#+BEGIN_EXAMPLE
+const Component = ({ name }) => <h1>Hello, {name}!</h1>
+#+END_EXAMPLE
+
+* Learning Objectives
+- [ ] Let learners understand how to "think in React"
+- [ ] Allow learners to gain experience with building a simple React application
+
+* Todo List
+And with that, we're finally at the main topic. As stated earlier, a React app
+is made up of many /Components/. So it is important that as a developer, you
+have an understanding of how to break down your application into components,
+based on your business requirements. Let's get on with the Hello World of
+frontend webdev, the Todo List.
+
+We'll start off with a basic HTML page.
+#+BEGIN_SRC html -n
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hello React</title>
+</head>
+<body>
+  
+</body>
+</html>
+#+END_SRC
+
+** How does React work?
+A HTML document can be represented as a tree of HTML nodes. This tree structure
+is commonly known as the Document Object Model, or DOM for short. To update the
+document, one could "manipulate the DOM", basically traversing this tree and
+updating DOM nodes as necessary.
+
+What React does is to build its own lightweight tree of all the nodes in the
+application. You may see this referred to as a /Virtual DOM/ in many online
+tutorials. In the case of web, this lightweight tree is an abstraction of the
+DOM itself. For mobile, this tree can be thought of as an object tree of the
+components required in the app.
+
+When an /update/ occurs, React /re-renders/ the components that have changed.
