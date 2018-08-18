@@ -19,6 +19,10 @@ have an understanding of how to break down your application into components,
 based on your business requirements. Let's get on with the Hello World of
 frontend webdev, the Todo List.
 
+In our Todo List, we'll create a simple list that keeps track of list of tasks
+to be completed. We'll be able to add new tasks, as well as toggle the status of
+a task when it's done.
+
 We'll start off with a basic HTML page.
 #+BEGIN_SRC html -n
 <!DOCTYPE html>
