@@ -4,9 +4,9 @@
 #+EMAIL: lohjingyen.16@ichat.sp.edu.sg
 #+DATE: June 2018
 
-#+BEGIN_QUOTE
-(() => alert('ES2018+'))();
-#+END_QUOTE
+#+BEGIN_EXAMPLE
+((message) => alert(message))('ES2018+');
+#+END_EXAMPLE
 
 * Learning Objectives
 - [ ] Provide high level overview to modern JS syntax
