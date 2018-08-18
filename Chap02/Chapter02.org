@@ -593,6 +593,7 @@ const course = {
 
 const student = { ...person, ...course };
 
+// {"name":"Francis","gender":null,"courseName":"DIT","school":"DMIT"}
 console.log(JSON.stringify(student));
 #+END_SRC
 
