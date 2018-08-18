@@ -597,9 +597,8 @@ console.log(JSON.stringify(student));
 #+END_SRC
 
 More docs and examples available at:
-[[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Deep_Clone#Deep_Clone][MDN Object.assign]]
-[[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax][MDN Spread syntax]]
-
+- [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Deep_Clone#Deep_Clone][MDN Object.assign]]
+- [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax][MDN Spread syntax]]
 ** Modules (not really ES6)
 JS was initially designed for simple interactions on the client side, and thus
 the original designers did not see the need for a module system. As the
