@@ -693,4 +693,30 @@ JavaScript functions.
 Besides JSX, ~create-react(-native)-app~ generated projects usually incorporate
 some experimental languages features (a.k.a. still in proposal). At the time of
 writing, this includes features like [[https://github.com/tc39/proposal-static-class-features/][static class features]] and [[https://github.com/tc39/proposal-dynamic-import][dynamic import]].
-** TODO Webpack
+** Webpack
+Webpack describes itself as a /static module bundler/ for modern JavaScript
+applications, which means it bundles up the modules in your app ¯\_(ツ)_/¯.
+These "modules" could be your JavaScript files, HTML files, CSS files, etc. By
+default, webpack only works with JavaScript files, but /loaders/ can be added to
+allow webpack to work with other filetypes, such as the abovementioned HTML and
+CSS, or even CSS preprocessors, and automagically compile them into CSS for you.
+
+Under the hood, webpack works by building a /dependency graph/ of your project.
+It begins this by traversing your project, starting from an /entry/ point, so
+you'll see webpack configs with an ~entry~ key e.g.
+#+BEGIN_SRC javascript
+module.exports = {
+  entry: './path/to/your/entry/file.js'
+};
+#+END_SRC
+
+From here, webpack traverses through your project, noting the /dependencies/ of
+your project e.g. your ~import~ statements, and produces an output
+bundle, or bundles, depending on the configuration.
+
+Webpack is also capable performing other tasks, with common examples such as
+bundle optimization, asset management and injection of environment variables.
+These tasks can be enabled through /plugins/.
+
+I won't be covering much on webpack, but it's important that you know
+~create-react-app~ uses webpack under the hood to bundle up your project.
