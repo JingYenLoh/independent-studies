@@ -24,9 +24,9 @@ React was not the first tool people reached for when building UIs.
 It is even possible that the reader has been overwhelmed by my initial chapter.
 At the time of writing, JavaScript is only briefly touched in DIT's syllabus and
 is woefully inadequate to cope with the massive changes JS has seen over recent
-years. This chapter attempts to fill those gaps enough that the reader may at
-least read the React documentation without feeling like diving into a rabbit
-hole.
+years. While not a comprehensive guide, this chapter attempts to fill those gaps
+enough that the reader may at least read the React documentation without feeling
+like diving into a rabbit hole.
 
 /Author's note: I make effort to explain things to the best of my ability, but IMHO nothing quite beats diving into documentation and writing some code yourself. To that, I include necessary links in this Chapter, and I encourage them to be visited to clarify any doubts and solidify understanding./
 
