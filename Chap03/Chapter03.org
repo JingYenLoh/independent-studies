@@ -217,3 +217,14 @@ Done? I decided to break it up into the following:
 - A *form* to add new TODO tasks,
 - and *List* of all the TODO tasks, which is composed of many
 - *TODO task* (s), which have a task name and a check indicating whether it's completed.
+
+You may already notice that we need to keep track of several things. We'll need
+to keep count of the TODO tasks, whether each individual task is completed, as
+well as the count of all tasks and all completed tasks. Going further, we also
+need to track what's being typed into the new task form, so that we know what's
+being submitted. Essentially, we'll need to keep track of the /state/ of several
+things.
+
+** Component State
+Up till now, I've been loosely using the term /Component/ and /Element/. They're
+actually different things.
