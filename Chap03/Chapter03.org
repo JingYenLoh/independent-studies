@@ -46,6 +46,7 @@ In our Todo List, we'll create a simple list that keeps track of list of tasks
 to be completed. We'll be able to add new tasks, as well as toggle the status of
 a task when it's done.
 
+** Hello, Components
 We'll start off with a basic HTML page.
 #+BEGIN_SRC html -n
 <!DOCTYPE html>
