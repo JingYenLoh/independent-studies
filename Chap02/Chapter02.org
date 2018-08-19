@@ -134,7 +134,7 @@ console.log(x);
 #+END_SRC
 
 So if ~let~ works similarly, what's the purpose of it? Why not just use ~const~
-with ~var~?
+or ~var~?
 
 This is a bit of gotcha for JS beginners: variables in JS are actually /function
 scoped/, meaning a ~var~ declaration allows for the variable to be accessible
@@ -525,9 +525,9 @@ same keys show up, e.g. ~object2~ had its ~c~ overwritten by ~object1~'s ~c~ of
 ~3~, and ~object3~ initially had ~a: 1~ coming from ~object1~, which was
 overwritten by the final ~{ a: 9}~ at the end of the arguments.
 
-~Object.assign~ does a /shallow clone/, which is a cool term for for saying it
-only copies the /reference/ if the source value. Once again, example ripped off
-from MDN, because that's the best place for learning these features (seriously):
+~Object.assign~ does a /shallow clone/, which is a cool term for saying it only
+copies the /reference/ of the source value. Once again, example ripped off from
+MDN, because that's the best place for learning these features (seriously):
 #+BEGIN_SRC javascript
 let obj1 = { a: 0 , b: { c: 0}};
 let obj2 = Object.assign({}, obj1);
