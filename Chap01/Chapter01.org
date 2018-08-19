@@ -9,7 +9,7 @@ No more JavaScript please -- Jing Yen Loh
 #+END_QUOTE
 
 * Learning Objectives
-- [ ] High level overview of React
+- [X] High level overview of React
 - [X] Set up development environment for React
   
 * React?
