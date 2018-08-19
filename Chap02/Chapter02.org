@@ -347,10 +347,9 @@ Underneath the hood, ~MyCoolComponent~ gets the properties of React's
 
 There's a good deal I haven't covered about classes, but this should be enough
 for a working introduction to React. We'll learn more along the way.
-
 ** Destructuring
 One of my favorite language features. Before we proceed, let's clear up some
-terminology. Here's a JavaScript Object.
+terminology. Here's a JavaScript object.
 
 #+BEGIN_SRC js
 const person = {
@@ -359,7 +358,7 @@ const person = {
 };
 #+END_SRC
 
-~person~ is an identifier for the Object, which consists of 2 /keys/, each with
+~person~ is an identifier for the object, which consists of 2 /keys/, each with
 a corresponding /value/.
 
 | key    | value   |
