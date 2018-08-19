@@ -50,10 +50,11 @@ This is mostly trivia/history, but I've included it to avoid potential
 confusion.
 *** Semicolons
 In JavaScript, semicolons are optional. Unlike Java or C#, where statements are
-delimited by a semicolon, the JS interpreter can guess where to delimit a
-statement. In fact, it is possible to write JS completely without semicolons,
-similar to programming languages such as Python. In practise, however,
-semicolons are still used, and even enforced for consistency.
+delimited by a semicolon, the JS compiler can infer where to delimit a
+statement, and add in a terminating semicolon. In fact, it is possible to write
+JS completely without semicolons, and rely solely on the compiler to infer how
+to terminate statements, similar to programming languages such as Python. In
+practise, however, semicolons are still used, and even enforced for consistency.
 
 /Author's note: For a while I enjoyed writing JS without semicolons, but eventually succumbed to semicolons, which also allows for modern features while remaining error free. Perhaps more on that another time./
 *** Null and Undefined
