@@ -369,13 +369,16 @@ a corresponding /value/.
 It's common to be writing code like the following:
 #+BEGIN_SRC js
 const name = person.name;
-#+END_SRC
 
+console.log(name); // 'Francis'
+#+END_SRC
 
 Destructuring allows you to extract the /key/ and assign it to a variable
 simultaneously:
 #+BEGIN_SRC js
 const { name } = person;
+
+console.log(name); // 'Francis'
 #+END_SRC
 
 Multiple keys are fine too:
