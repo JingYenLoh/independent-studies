@@ -51,7 +51,7 @@ a task when it's done.
 
 It'll look something like this:
 #+ATTR_HTML: :width 600px
-[[file:todo-list.jpeg][Todo List]]
+[[file:todo-list.jpeg]]
 
 ** Hello, Components
 We'll start off with a basic HTML page.
