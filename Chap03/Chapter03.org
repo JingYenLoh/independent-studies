@@ -22,13 +22,16 @@ What React does is to build its own lightweight tree of all the nodes in the
 application. You may see this referred to as a /Virtual DOM/ in many online
 tutorials. In the case of web, this lightweight tree is an abstraction of the
 DOM itself. For mobile, this tree can be thought of as an object tree of the
-components required in the app.
+components required in the app. Because the DOM traversal, or the manual
+updating of the DOM tree is abstracted away when working with React, writing
+React code is described as /declarative/, where one focuses on working with the
+/presentation/.
 
 When an /update/ occurs, React /re-renders/ the components that have changed.
 To keep re-renders efficient, React tries to be smart about how and when to
 re-render. One way it does this is through a /diffing algorithm/, which compares
 the current /state/ against the previous /state/, then only updates the parts
-which changed. 
+which changed.
 
 Another technique React uses is not to apply updates immediately, but rather
 send these updates to a queue, where they're /batched/ if React feels they can
