@@ -12,6 +12,29 @@ const Component = ({ name }) => <h1>Hello, {name}!</h1>
 - [ ] Let learners understand how to "think in React"
 - [ ] Allow learners to gain experience with building a simple React application
 
+* How does React work?
+A HTML document can be represented as a tree of HTML nodes. This tree structure
+is commonly known as the Document Object Model, or DOM for short. To update the
+document, one could "manipulate the DOM", basically traversing this tree and
+updating DOM nodes as necessary.
+
+What React does is to build its own lightweight tree of all the nodes in the
+application. You may see this referred to as a /Virtual DOM/ in many online
+tutorials. In the case of web, this lightweight tree is an abstraction of the
+DOM itself. For mobile, this tree can be thought of as an object tree of the
+components required in the app.
+
+When an /update/ occurs, React /re-renders/ the components that have changed.
+To keep re-renders efficient, React tries to be smart about how and when to
+re-render. One way it does this is through a /diffing algorithm/, which compares
+the current /state/ against the previous /state/, then only updates the parts
+which changed. 
+
+Another technique React uses is not to apply updates immediately, but rather
+send these updates to a queue, where they're /batched/ if React feels they can
+be updated in 1 go. This /batching/, as it's known as, can create some gotchas
+for beginners, which I'll try to cover in future chapters.
+
 * Todo List
 And with that, we're finally at the main topic. As stated earlier, a React app
 is made up of many /Components/. So it is important that as a developer, you
@@ -39,16 +62,5 @@ We'll start off with a basic HTML page.
 </html>
 #+END_SRC
 
-** How does React work?
-A HTML document can be represented as a tree of HTML nodes. This tree structure
-is commonly known as the Document Object Model, or DOM for short. To update the
-document, one could "manipulate the DOM", basically traversing this tree and
-updating DOM nodes as necessary.
 
-What React does is to build its own lightweight tree of all the nodes in the
-application. You may see this referred to as a /Virtual DOM/ in many online
-tutorials. In the case of web, this lightweight tree is an abstraction of the
-DOM itself. For mobile, this tree can be thought of as an object tree of the
-components required in the app.
 
-When an /update/ occurs, React /re-renders/ the components that have changed.
