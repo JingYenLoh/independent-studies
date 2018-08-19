@@ -1,0 +1,7 @@
+#+TITLE: Links
+
+[[https://reactjs.org][Reactjs.org]]
+[[https://stackoverflow.com/questions/41804855/does-react-native-have-a-virtual-dom][Does RN have a Virtual DOM?]]
+[[https://code.facebook.com/posts/1014532261909640/react-native-bringing-modern-web-techniques-to-mobile/][RN post by Fb]]
+[[https://facebook.github.io/react-native/][RN official]]
+[[https://hackernoon.com/a-definitive-guide-to-javascript-prototypes-2c263788021e][Prototypes]]

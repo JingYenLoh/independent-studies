@@ -12,6 +12,32 @@ const Component = ({ name }) => <h1>Hello, {name}!</h1>
 - [ ] Let learners understand how to "think in React"
 - [ ] Allow learners to gain experience with building a simple React application
 
+* How does React work?
+A HTML document can be represented as a tree of HTML nodes. This tree structure
+is commonly known as the Document Object Model, or DOM for short. To update the
+document, one could "manipulate the DOM", basically traversing this tree and
+updating DOM nodes as necessary.
+
+What React does is to build its own lightweight tree of all the nodes in the
+application. You may see this referred to as a /Virtual DOM/ in many online
+tutorials. In the case of web, this lightweight tree is an abstraction of the
+DOM itself. For mobile, this tree can be thought of as an object tree of the
+components required in the app. Because the DOM traversal, or the manual
+updating of the DOM tree is abstracted away when working with React, writing
+React code is described as /declarative/, where one focuses on working with the
+/presentation/.
+
+When an /update/ occurs, React /re-renders/ the components that have changed.
+To keep re-renders efficient, React tries to be smart about how and when to
+re-render. One way it does this is through a /diffing algorithm/, which compares
+the current /state/ against the previous /state/, then only updates the parts
+which changed.
+
+Another technique React uses is not to apply updates immediately, but rather
+send these updates to a queue, where they're /batched/ if React feels they can
+be updated in 1 go. This /batching/, as it's known as, can create some gotchas
+for beginners, which I'll try to cover in future chapters.
+
 * Todo List
 And with that, we're finally at the main topic. As stated earlier, a React app
 is made up of many /Components/. So it is important that as a developer, you
@@ -23,7 +49,13 @@ In our Todo List, we'll create a simple list that keeps track of list of tasks
 to be completed. We'll be able to add new tasks, as well as toggle the status of
 a task when it's done.
 
-We'll start off with a basic HTML page.
+It'll look something like this:
+#+ATTR_HTML: :width 600px
+[[file:todo-list.jpeg]]
+
+** Hello, Components
+Before we even go into the frontend Hello World, let's do a component Hello
+World. We'll start off with a basic HTML page.
 #+BEGIN_SRC html -n
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +63,7 @@ We'll start off with a basic HTML page.
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Hello React</title>
+  <title>React TodoList</title>
 </head>
 <body>
   
@@ -39,16 +71,142 @@ We'll start off with a basic HTML page.
 </html>
 #+END_SRC
 
-** How does React work?
-A HTML document can be represented as a tree of HTML nodes. This tree structure
-is commonly known as the Document Object Model, or DOM for short. To update the
-document, one could "manipulate the DOM", basically traversing this tree and
-updating DOM nodes as necessary.
+Of course, we'll need React to ...work with React ¯\_(ツ)_/¯. Let's include that:
+#+BEGIN_SRC html -i -n 6
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-What React does is to build its own lightweight tree of all the nodes in the
-application. You may see this referred to as a /Virtual DOM/ in many online
-tutorials. In the case of web, this lightweight tree is an abstraction of the
-DOM itself. For mobile, this tree can be thought of as an object tree of the
-components required in the app.
+  <!-- We'll need React and react-dom -->
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
 
-When an /update/ occurs, React /re-renders/ the components that have changed.
+  <title>React TodoList</title>
+#+END_SRC
+
+Your React app has to begin somewhere. A general convention is to create a ~div~
+with an ~id~ of ~root~. This isn't strictly required, in fact you could use some
+other tag e.g. ~body~, although it is pretty common to start off with ~<div
+id="root"></div>~.
+#+BEGIN_SRC html -n 14
+<body>
+
+  <!-- This is where the React app in this example will be! -->
+  <div id="root"></div>
+
+</body>
+#+END_SRC
+
+And now for our first React Component:
+#+BEGIN_SRC html -i -n 17
+  <div id="root"></div>
+
+  <script>
+    const MyFirstElement = React.createElement('h1', {}, 'My First React Element!');
+
+    ReactDOM.render(MyFirstElement, document.getElementById('root'));
+  </script>
+#+END_SRC
+
+Now to serve our mini app. I recommend [[https://www.browsersync.io/][Browsersync]], which offers a nice hot
+reload feature:
+#+BEGIN_SRC sh
+# Install Browsersync
+npm install -g browser-sync
+#+END_SRC
+
+Now run Browsersync from the folder your ~index.html~ is located:
+#+BEGIN_SRC sh
+# Run Browsersync and serve your index.html file
+browser-sync start --server --files "*.html"
+#+END_SRC
+
+You should see something like this:
+
+#+ATTR_HTML: :width 600px
+[[file:first-react-element.jpeg]]
+
+Success! You've just managed to create your first React Element. There's a lot
+that happened in the last few steps, so let's break it down.
+
+In the following line, you create a React /Element/ using the ~createElement~
+method. The [[https://reactjs.org/docs/react-api.html#createelement][documentation]] for ~createElement~ states that it takes in a ~type~,
+which in this case was a ~h1~, some /props/, which is simply an empty object in
+our example, and finally some children, where we used the string 'My First React
+Element!'.
+#+BEGIN_SRC javascript
+const MyFirstElement = React.createElement('h1', {}, 'My First React Element!');
+#+END_SRC
+
+The ~React~ object was brought into the namespace by the following line:
+#+BEGIN_SRC html
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+#+END_SRC
+
+- [ ] TODO: Inspector shortcuts
+Opening your Element Inspector, we find that the code was compiled into the
+following:
+
+#+ATTR_HTML: :width 600px
+[[file:react-dom-rendered.jpeg]]
+
+The following is the one that does the rendering of the element onto the DOM.
+So essentially, the 2 lines of code created a ~<h1>~ element with "My First
+React Element" as its content, then displayed it on the DOM.
+#+BEGIN_SRC javascript
+ReactDOM.render(MyFirstElement, document.getElementById('root'));
+#+END_SRC
+
+And that's it! You've just made your Component Hello World!
+
+** JSX
+The above code works, but ~createElement~ is rather... unweldly to write. As
+alluded to in previous chapters, React supports writing Components in an XML
+looking syntax known as JSX. Let's rewrite that using JSX instead. We'll first
+include the library that transpiles JSX to ~createElement~ calls, so add the
+following to the page:
+#+BEGIN_SRC html -i -n 6
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- We'll need React and react-dom -->
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+
+  <!-- Let's use babel as well so we can write Jsx :) -->
+  <script crossorigin src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  <title>React TodoList</title>
+#+END_SRC
+That'll enable you to write components in JSX syntax.
+
+Now we'll refactor the ~createElement~ to the syntax you'll be getting very
+familiar with:
+#+BEGIN_SRC diff
+  <script>
+-    const MyFirstElement = React.createElement('h1', {}, 'My First React Element!');
++    const MyFirstElement = <h1>My First React Element!</h1>;
+
+    ReactDOM.render(MyFirstElement, document.getElementById('app'));
+  </script>
+#+END_SRC
+Save the file and Browsersync should automatically reload the page. You
+shouldn't see a difference, though, all you did was just rewrite your component
+in JSX.
+
+Let's break this down a little. You'll notice that the ~'h1'~ is now an XML tag,
+and ~'My First React Element!'~ is enclosed by the tag. This isn't quite unlike
+HTML, and in fact for this simple component, it is exactly the same when
+rendered on the DOM. The second argument, ~{}~, are the /props/ that the
+component takes, which is an empty object in this case, and thus we don't really
+see any representation of it in the JSX version. We could as well have passed
+~null~ in this case.
+
+** Thinking in Components
+So we can write HTML in JavaScript now... cool. Patience. Let's get back to our
+Todo List.
+
+Writing React code is all about creating components, and /composing/ these
+components to build together your application. Therefore, it's important that
+you can visualize how to break your application down into different components,
+and join them together. Spend 2 minutes to think about how your entire app would
+look like, and how you could break up things into logical groups.
+
+Done? I decided to break it up into the following:

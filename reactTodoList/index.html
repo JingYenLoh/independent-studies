@@ -7,8 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
   <!-- We'll need React and react-dom -->
-  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
   <!-- Let's use babel as well so we can write Jsx :) -->
   <script crossorigin src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
@@ -18,7 +18,7 @@
 <body>
 
   <!-- This is where the React app in this example will be! -->
-  <div id="app"></div>
+  <div id="root"></div>
 
   <!-- Our React code -->
   <script type="text/babel">
@@ -63,11 +63,11 @@
         newTaskName: "",
         // This are some hardcoded todos
         todos: [
-          { taskName: "Immutability helpers", isDone: true },
-          { taskName: "Not CDN", isDone: false },
-          { taskName: "Install things", isDone: false },
-          { taskName: "State management", isDone: false },
-        ]
+          { taskName: "Explain JSX", isDone: true },
+          { taskName: "Demo React", isDone: false },
+          { taskName: "Explain Lifecycle", isDone: false },
+          { taskName: "Explain state", isDone: false },
+        ],
       };
       this.updateTaskName = this.updateTaskName.bind(this);
       this.addNewTodo = this.addNewTodo.bind(this);
@@ -128,10 +128,10 @@
     }
   }
 
-  // Render `MainApp` into the div with the id of "app"
+  // Render `MainApp` into the div with the id of "root"
   ReactDOM.render(
     <MainApp />,
-    document.getElementById("app")
+    document.getElementById("root")
   );
   </script>
 
