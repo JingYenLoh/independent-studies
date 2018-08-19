@@ -54,7 +54,8 @@ It'll look something like this:
 [[file:todo-list.jpeg]]
 
 ** Hello, Components
-We'll start off with a basic HTML page.
+Before we even go into the frontend Hello World, let's do a component Hello
+World. We'll start off with a basic HTML page.
 #+BEGIN_SRC html -n
 <!DOCTYPE html>
 <html lang="en">
