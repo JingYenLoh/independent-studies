@@ -94,7 +94,7 @@ And now for our first React Component:
   <script>
     const MyFirstElement = React.createElement('h1', {}, 'My First React Element!');
 
-    ReactDOM.render(MyFirstElement, document.getElementById('root));
+    ReactDOM.render(MyFirstElement, document.getElementById('root'));
   </script>
 #+END_SRC
 
@@ -144,7 +144,7 @@ The following is the one that does the rendering of the element onto the DOM.
 So essentially, the 2 lines of code created a ~<h1>~ element with "My First
 React Element" as its content, then displayed it on the DOM.
 #+BEGIN_SRC javascript
-ReactDOM.render(MyFirstElement, document.getElementById('root));
+ReactDOM.render(MyFirstElement, document.getElementById('root'));
 #+END_SRC
 
 And that's it! You've just made your Component Hello World!
