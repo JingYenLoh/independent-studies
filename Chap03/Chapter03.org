@@ -210,3 +210,10 @@ and join them together. Spend 2 minutes to think about how your entire app would
 look like, and how you could break up things into logical groups.
 
 Done? I decided to break it up into the following:
+#+ATTR_HTML: :width 600px
+[[file:todo-list-broken-down.jpeg]]
+
+- a Title, displaying the tasks available and tasks completed,
+- A form to add new TODO tasks,
+- and List of all the TODO tasks, which is composed of many
+- TODO tasks, which have a task name and a check indicating whether it's completed.
