@@ -157,5 +157,45 @@ ReactDOM.render(MyFirstElement, document.getElementById('root'));
 
 And that's it! You've just made your Component Hello World!
 
+** JSX
+The above code works, but ~createElement~ is rather... unweldly to write. As
+alluded to in previous chapters, React supports writing Components in an XML
+looking syntax known as JSX. Let's rewrite that using JSX instead. We'll first
+include the library that transpiles JSX to ~createElement~ calls, so add the
+following to the page:
+#+BEGIN_SRC html -i -n 6
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+  <!-- We'll need React and react-dom -->
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+
+  <!-- Let's use babel as well so we can write Jsx :) -->
+  <script crossorigin src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  <title>React TodoList</title>
+#+END_SRC
+That'll enable you to write components in JSX syntax.
+
+Now we'll refactor the ~createElement~ to the syntax you'll be getting very
+familiar with:
+#+BEGIN_SRC diff
+  <script>
+-    const MyFirstElement = React.createElement('h1', {}, 'My First React Element!');
++    const MyFirstElement = <h1>My First React Element!</h1>;
+
+    ReactDOM.render(MyFirstElement, document.getElementById('app'));
+  </script>
+#+END_SRC
+Save the file and Browsersync should automatically reload the page. You
+shouldn't see a difference, though, all you did was just rewrite your component
+in JSX.
+
+Let's break this down a little. You'll notice that the ~'h1'~ is now an XML tag,
+and ~'My First React Element!'~ is enclosed by the tag. This isn't quite unlike
+HTML, and in fact for this simple component, it is exactly the same when
+rendered on the DOM. The second argument, ~{}~, are the /props/ that the
+component takes, which is an empty object in this case, and thus we don't really
+see any representation of it in the JSX version. We could as well have passed
+~null~ in this case.
 
