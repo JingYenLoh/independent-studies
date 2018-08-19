@@ -199,3 +199,14 @@ component takes, which is an empty object in this case, and thus we don't really
 see any representation of it in the JSX version. We could as well have passed
 ~null~ in this case.
 
+** Thinking in Components
+So we can write HTML in JavaScript now... cool. Patience. Let's get back to our
+Todo List.
+
+Writing React code is all about creating components, and /composing/ these
+components to build together your application. Therefore, it's important that
+you can visualize how to break your application down into different components,
+and join them together. Spend 2 minutes to think about how your entire app would
+look like, and how you could break up things into logical groups.
+
+Done? I decided to break it up into the following:
