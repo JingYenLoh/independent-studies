@@ -63,5 +63,91 @@ We'll start off with a basic HTML page.
 </html>
 #+END_SRC
 
+Of course, we'll need React to ...work with React ¯\_(ツ)_/¯. Let's include that:
+#+BEGIN_SRC html -i -n 6
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- We'll need React and react-dom -->
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+
+  <title>React TodoList</title>
+#+END_SRC
+
+Your React app has to begin somewhere. A general convention is to create a ~div~
+with an ~id~ of ~root~. This isn't strictly required, in fact you could use some
+other tag e.g. ~body~, although it is pretty common to start off with ~<div
+id="root"></div>~.
+#+BEGIN_SRC html -n 14
+<body>
+
+  <!-- This is where the React app in this example will be! -->
+  <div id="root"></div>
+
+</body>
+#+END_SRC
+
+And now for our first React Component:
+#+BEGIN_SRC html -i -n 17
+  <div id="root"></div>
+
+  <script>
+    const MyFirstElement = React.createElement('h1', {}, 'My First React Element!');
+
+    ReactDOM.render(MyFirstElement, document.getElementById('root));
+  </script>
+#+END_SRC
+
+Now to serve our mini app. I recommend [[https://www.browsersync.io/][Browsersync]], which offers a nice hot
+reload feature:
+#+BEGIN_SRC sh
+# Install Browsersync
+npm install -g browser-sync
+#+END_SRC
+
+Now run Browsersync from the folder your ~index.html~ is located:
+#+BEGIN_SRC sh
+# Run Browsersync and serve your index.html file
+browser-sync start --server --files "*.html"
+#+END_SRC
+
+You should see something like this:
+
+#+ATTR_HTML: :width 600px
+[[file:first-react-element.jpeg]]
+
+Success! You've just managed to create your first React Element. There's a lot
+that happened in the last few steps, so let's break it down.
+
+In the following line, you create a React /Element/ using the ~createElement~
+method. The [[https://reactjs.org/docs/react-api.html#createelement][documentation]] for ~createElement~ states that it takes in a ~type~,
+which in this case was a ~h1~, some /props/, which is simply an empty object in
+our example, and finally some children, where we used the string 'My First React
+Element!'.
+#+BEGIN_SRC javascript
+const MyFirstElement = React.createElement('h1', {}, 'My First React Element!');
+#+END_SRC
+
+The ~React~ object was brought into the namespace by the following line:
+#+BEGIN_SRC html
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+#+END_SRC
+
+- [ ] TODO: Inspector shortcuts
+Opening your Element Inspector, we find that the code was compiled into the
+following:
+
+#+ATTR_HTML: :width 600px
+[[file:react-dom-rendered.jpeg]]
+
+The following is the one that does the rendering of the element onto the DOM.
+So essentially, the 2 lines of code created a ~<h1>~ element with "My First
+React Element" as its content, then displayed it on the DOM.
+#+BEGIN_SRC javascript
+ReactDOM.render(MyFirstElement, document.getElementById('root));
+#+END_SRC
+
+And that's it! You've just made your Component Hello World!
+
 
 
