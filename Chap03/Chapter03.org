@@ -225,6 +225,64 @@ need to track what's being typed into the new task form, so that we know what's
 being submitted. Essentially, we'll need to keep track of the /state/ of several
 things.
 
-** Component State
+** Components, Elements, and State
 Up till now, I've been loosely using the term /Component/ and /Element/. They're
-actually different things.
+actually different things. Let's take our Hello World Component example, which
+we know gets transpiled via Babel into this:
+#+BEGIN_SRC javascript
+const MyFirstElement = React.createElement(
+  'h1',
+  {},
+  'My First React Element!'
+);
+#+END_SRC
+
+As the name would suggest, this creates a React Element. The object it returns
+looks something like this:
+#+BEGIN_SRC javascript
+const MyFirstElement = {
+  key: null,
+  props: {
+    children: 'My First React Element!',
+  },
+  ref: null,
+  type: 'h1',
+};
+#+END_SRC
+which is just a normal JavaScript object with a few properties, namely:
+- a *key*, which is used to identify specific React Elements within a collection,
+- *props*, which are the props that are passed down to the Element,
+- a *ref*, the reference to the underlying DOM element that this React Element is
+  associated with
+- its *type*, which is either a type of HTML element, or a React Component.
+  
+Let's ignore key and ref for now. We'll get to props soon. The point is, the code:
+#+BEGIN_SRC javascript
+const MyFirstElement = <h1>My First React Element!</h1>;
+#+END_SRC
+is really just creating a React Element. So what are Components then?
+
+React Components are instances of the ~React.Component~ class. Recall the
+earlier chapters had an example similar to this:
+#+BEGIN_SRC javascript
+class MyFirstComponent extends React.Component {
+  // ...
+  render() {
+    return <h1>My First React Element!</h1>;
+  }
+}
+#+END_SRC
+The ~MyFirstElement~ function is a component too, but there are some differences
+between it and the above ~MyFirstComponent~ example, which extends from
+~React.Component~. ~MyFirstElement~ simply creates and returns an element, while
+the class based syntax offers the following:
+- *lifecycle hooks*, which I'll cover in the next chapter
+- *state*, where you can keep track of pieces of state specific to an instance
+  of the component
+
+Because ~MyFirstElement~ doesn't keep track of state, but simply display data,
+many names have been invented for it, such as /stateless functional components/
+and /dumb components/. The official docs calls them /functional components/. The
+similarity between them, though, is that they're both functions that return
+Elements.
+
