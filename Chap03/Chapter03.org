@@ -199,6 +199,47 @@ component takes, which is an empty object in this case, and thus we don't really
 see any representation of it in the JSX version. We could as well have passed
 ~null~ in this case.
 
+JSX supports HTML attributes, and writing them is pretty similar:
+#+BEGIN_SRC javascript
+function LinkToGoogleComponent() {
+  return (
+    <a href="https://www.google.com">Google</a>
+  )
+}
+#+END_SRC
+The above component, when rendered in the DOM, will be exactly what it looks
+like in the function.
+
+Note, however, that I used the term /similar/. Because JSX is JavaScript
+underneath, it follows the /camelCase/ convention for attributes, rather than
+the convention followed by HTML attributes. For example, the HTML attribute
+~tabindex~ should be written as ~tabIndex~ in JSX.
+#+BEGIN_SRC html
+<!-- In plain HTML -->
+<a href="https://www.w3schools.com/" tabindex="2">W3Schools</a>
+<a href="http://www.google.com/" tabindex="1">Google</a>
+<a href="http://www.microsoft.com/" tabindex="3">Microsoft</a>
+
+<!-- In JSX, you would write tabindex as tabIndex instead -->
+<a href="https://www.w3schools.com/" tabIndex="2">W3Schools</a>
+<a href="http://www.google.com/" tabIndex="1">Google</a>
+<a href="http://www.microsoft.com/" tabIndex="3">Microsoft</a>
+#+END_SRC
+
+Also, some HTML attributes conflict with JavaScript keywords, such as ~class~
+and ~for~. React's solution was to use give them custom attributes that render
+into these HTML attributes instead:
+#+BEGIN_SRC javascript
+// Use htmlFor instead of for
+<label htmlFor="email">Email</label>
+
+// Use className instead of class
+<button type="submit" className="button">Submit</button>
+#+END_SRC
+
+There's other rules as well, but let's not deviate too much. Here's a [[https://reactjs.org/docs/jsx-in-depth.html][link]] to
+JSX in depth if you're interested.
+
 ** Thinking in Components
 So we can write HTML in JavaScript now... cool. Patience. Let's get back to our
 Todo List.
