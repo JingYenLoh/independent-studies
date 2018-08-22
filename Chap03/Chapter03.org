@@ -158,7 +158,7 @@ ReactDOM.render(MyFirstElement, document.getElementById('root'));
 And that's it! You've just made your Component Hello World!
 
 ** JSX
-The above code works, but ~createElement~ is rather... unweldly to write. As
+The above code works, but ~createElement~ is rather... unwieldly to write. As
 alluded to in previous chapters, React supports writing Components in an XML
 looking syntax known as JSX. Let's rewrite that using JSX instead. We'll first
 include the library that transpiles JSX to ~createElement~ calls, so add the
