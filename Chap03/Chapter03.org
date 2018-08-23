@@ -597,8 +597,7 @@ We're able to display some tasks now, but it's all hardcoded. We aren't able to
 add new tasks as well, so let's remedy that. We'll use a classic HTML form to
 add new tasks. We know a task has a ~taskName~, and if we're adding something to
 our Todo list, logically it's not done yet, so we won't need that in our form.
-I'll start it off within the ~MainApp~, and extract a component out later.
-Here's my initial implementation:
+I'll start it off within the ~MainApp~. Here's my initial implementation:
 #+BEGIN_SRC diff
 class MainApp extends React.Component {
 // ...
