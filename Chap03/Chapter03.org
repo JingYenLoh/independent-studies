@@ -199,6 +199,72 @@ component takes, which is an empty object in this case, and thus we don't really
 see any representation of it in the JSX version. We could as well have passed
 ~null~ in this case.
 
+Note that in a component, you can only have 1 /root element/. That is to say,
+you can't return multiple adjacent elements, or React will complain:
+#+BEGIN_SRC javascript
+// Syntax error: Adjacent JSX elements must be wrapped in an enclosing tag
+function MultipleAdjacentElements() {
+  return (
+    <p>Before my bed, the moon is shining bright,</p>
+    <p>I think that it is frost upon the ground.</p>
+    <p>I raise my head and look at the bright moon,</p>
+    <p>I lower my head and think of home.</p>
+  );
+}
+#+END_SRC
+
+As the error message suggests, you'll need to wrap them in some tag and nest
+them. Usually we end up using ~<div>~ for wrapping things.
+#+BEGIN_SRC javascript
+function MultipleAdjacentElements() {
+  return (
+    <div>
+      <p>Before my bed, the moon is shining bright,</p>
+      <p>I think that it is frost upon the ground.</p>
+      <p>I raise my head and look at the bright moon,</p>
+      <p>I lower my head and think of home.</p>
+    </div>
+  );
+}
+#+END_SRC
+One caveat: you end up with ~div~ littered all over your app, particularly if
+you have to wrap a lot of elements. In best case scenario it's just non-semantic
+HTML. You could be unlucky, however. Once I used a CSS library which relied on
+the ~+~ selector (elements placed immediately after), and because the div was in
+the way, the styling refused to work properly.
+
+[[https://reactjs.org/blog/2017/09/26/react-v16.0.html#new-render-return-types-fragments-and-strings][React 16]] allowed you to return an array of elements instead, but a supplied
+~key~ was necessary. Example directly lifted from React docs:
+#+BEGIN_SRC javascript
+render() {
+  // No need to wrap list items in an extra element!
+  return [
+    // Don't forget the keys :)
+    <li key="A">First item</li>,
+    <li key="B">Second item</li>,
+    <li key="C">Third item</li>,
+  ];
+}
+#+END_SRC
+/Author's note: The syntax is not very intuitive, in my opinion./
+
+In React 16.2, a new feature was introduced: *Fragments*. Fragments are a
+special component in the React library that you can use like any other element,
+but do not get rendered onto the DOM. This was made possible through compiler
+changes in the React library.
+#+BEGIN_SRC javascript
+function MultipleAdjacentElements() {
+  return (
+    <React.Fragment>
+      <p>Before my bed, the moon is shining bright,</p>
+      <p>I think that it is frost upon the ground.</p>
+      <p>I raise my head and look at the bright moon,</p>
+      <p>I lower my head and think of home.</p>
+    <React.Fragment>
+  );
+}
+#+END_SRC
+
 JSX supports HTML attributes, and writing them is pretty similar:
 #+BEGIN_SRC javascript
 function LinkToGoogleComponent() {
