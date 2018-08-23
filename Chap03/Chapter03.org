@@ -979,3 +979,12 @@ And done! This is my end product.
 #+ATTR_HTML: :width 400px
 [[file:final-todolist.jpeg]]
 
+* Exercises
+1. A Todo list isn't very versatile if you can't remove tasks from it. Implement
+   task removal for the list. *Hint:* Have a remove button for every task, and
+   have an ~onPress~ handler for it. Look into the ~Array.prototype.slice~
+   method as well.
+2. Extract the form into its own component. *Hint:* Pass the handlers as props.
+3. The ~toggleIsDone~ implementation works, but is rather clunky. Refer to the
+   [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice][slice]] method again. Is there a way to write the code for ~toggleIsDone~,
+   using slice?
