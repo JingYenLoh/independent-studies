@@ -50,7 +50,7 @@ to be completed. We'll be able to add new tasks, as well as toggle the status of
 a task when it's done.
 
 It'll look something like this:
-#+ATTR_HTML: :width 600px
+#+ATTR_HTML: :width 400px
 [[file:todo-list.jpeg]]
 
 ** Hello, Components
