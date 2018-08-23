@@ -321,12 +321,12 @@ Done? I decided to break it up into the following:
 [[file:todo-list-broken-down.jpeg]]
 
 - a *Title*, displaying the tasks available and tasks completed,
-- A *form* to add new TODO tasks,
-- and *List* of all the TODO tasks, which is composed of many
-- *TODO task* (s), which have a task name and a check indicating whether it's completed.
+- A *form* to add new Todo tasks,
+- and *List* of all the Todo tasks, which is composed of many
+- *Todo task* (s), which have a task name and a check indicating whether it's completed.
 
 You may already notice that we need to keep track of several things. We'll need
-to keep count of the TODO tasks, whether each individual task is completed, as
+to keep count of the Todo tasks, whether each individual task is completed, as
 well as the count of all tasks and all completed tasks. Going further, we also
 need to track what's being typed into the new task form, so that we know what's
 being submitted. Essentially, we'll need to keep track of the /state/ of several
@@ -393,7 +393,7 @@ and /dumb components/. The official docs calls them /functional components/. The
 similarity between them, though, is that they're both functions that return
 Elements.
 
-We know our app needs to track of our TODO tasks, which counts as state, so
+We know our app needs to track of our Todo tasks, which counts as state, so
 let's write a Component for it. I'll call it ~MainApp~, because I'm not a
 creative person. A Component must always have a ~render~ method, so let's put a
 placeholder implementation as well.
@@ -411,7 +411,7 @@ React, it's necessary for user-defined components to start with an uppercase
 letter. This is because React might infer lowercase tags as plain HTML tags. The
 [[https://reactjs.org/docs/jsx-in-depth.html#user-defined-components-must-be-capitalized][official docs]] has a section about this in more detail.
 
-We know our app has to track your TODO tasks, where a single task consists of a
+We know our app has to track your Todo tasks, where a single task consists of a
 task name and whether it's done. In code, it could be represented in this
 format:
 #+BEGIN_SRC javascript
@@ -466,12 +466,12 @@ class MainApp extends React.Component {
 #+END_SRC
 
 ** Props
-I'll stick to the constructor for now, though. So we have some TODO tasks now,
+I'll stick to the constructor for now, though. So we have some Todo tasks now,
 but it's not being displayed. Let's fix that. We know we want to have a list,
-and a single TODO task. I decided to name the single TODO task a ~TodoItem~,
+and a single Todo task. I decided to name the single Todo task a ~TodoItem~,
 which will take in the /props/ ~taskName~ and ~isDone~.
 #+BEGIN_SRC javascript
-// Represents a single TODO task
+// Represents a single Todo task
 function TodoItem(props) {
   return (
     <div>
@@ -590,7 +590,7 @@ something like this now:
 #+ATTR_HTML: :width 400px
 [[file:todoitems.jpeg]]
 
-That's my list of TODOs, rendered onto the DOM by React. Huzzah!
+That's my list of Todos, rendered onto the DOM by React. Huzzah!
 
 ** Forms
 We're able to display some tasks now, but it's all hardcoded. We aren't able to
@@ -617,7 +617,7 @@ class MainApp extends React.Component {
 +               value=""
 +             />
 +           </label>
-+           <input type="submit" value="Add TODO" />
++           <input type="submit" value="Add Todo" />
 +         </form>
 +
 +         <TodoItems todos={this.state.todos} />
@@ -664,7 +664,7 @@ class MainApp extends React.Component {
 +               value={this.state.taskName}
              />
            </label>
-           <input type="submit" value="Add TODO" />
+           <input type="submit" value="Add Todo" />
          </form>
 
          <TodoItems todos={this.state.todos} />
