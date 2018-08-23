@@ -825,3 +825,110 @@ class MainApp extends React.Component {
    }
 }
 #+END_SRC
+
+** Returning a handler in a handler
+Things are definitely better now, but we're not quite done yet. We still can't
+toggle whether a task is done, and that's not a very useful Todo list. Let's
+work on that. To update the ~isDone~ state of a task in the list, we need to
+tell React which task changed. One straightforward way is to use the index of
+the task. We can retrieve that as the second argument in the function passed to
+~map~. Here's how I implemented it.
+#+BEGIN_SRC diff
+function TodoItem(props) {
+  return (
+    <div>
+      <span>{props.taskName}</span>
+      <input
+        type="checkbox"
+        checked={props.isDone}
++        onChange={props.toggleIsDone}
+      />
+    </div>
+  );
+}
+
+function TodoItems(props) {
+  return (
+    <ul>
+-      {props.todos.map(todo => (
++      {props.todos.map((todo, index) => (
+        <li key={todo.taskName}>
+-          <TodoItem taskName={todo.taskName} isDone={todo.isDone} />
++          <TodoItem
++            taskName={todo.taskName}
++            isDone={todo.isDone}
++            toggleIsDone={props.toggleIsDone(index)}
++          />
+        </li>
+      ))}
+    </ul>
+  )
+}
+class MainApp extends React.Component {
+  constructor(props) {
+    // ...
+    this.updateTaskName = this.updateTaskName.bind(this);
++    this.toggleIsDone = this.toggleIsDone.bind(this);
+  }
+
+  // ...
+
++  toggleIsDone(index) {
++    return (event) => {
++      const todos = [...this.state.todos];
++      todos[index] = { ...this.state.todos[index], isDone: event.target.checked };
++      this.setState({ todos: todos });
++    }
++  }
++
+
+  // ...
+
+  render() {
+    return (
+      // ...
+-        <TodoItems todos={this.state.todos} />
++        <TodoItems todos={this.state.todos} toggleIsDone={this.toggleIsDone} />
+      // ...
+    );
+  }
+}
+#+END_SRC
+
+Let's go through that step by step. We implement a ~toggleIsDone~ handler, and
+bind it as usual. This time, however, we don't call ~setState~ immediately, and
+the argument isn't an event. Instead, it returns a function that handles the
+event. How does this work?
+
+Let's look at what calls ~toggleIsDone~. We pass it to ~TodoItems~, which passes
+it down again as a prop ~toggleIsDone~, and also calls the function with an
+argument of the current index of the item in ~todos~. Because ~toggleIsDone~
+gets invoked here, we're actually passing down the function that ~toggleIsDone~
+returned as the prop.
+
+Finally, in ~TodoItem~, we set the ~onChange~ for the checkbox to be the
+function passed down. Let's look at the code for this handler. In the first
+line, we make a copy of the current ~todos~:
+#+BEGIN_SRC javascript
+const todos = [...this.state.todos];
+#+END_SRC
+
+We then update the task that the checkbox was toggled on, using the spread
+syntax to clone the object and override its ~isDone~ property with the event's:
+#+BEGIN_SRC javascript
+todos[index] = { ...this.state.todos[index], isDone: event.target.checked };
+#+END_SRC
+
+Finally, we update the state.
+#+BEGIN_SRC javascript
+this.setState({ todos: todos });
+#+END_SRC
+
+Save the page, and try toggling those checkboxes. They should all be working
+now!
+
+That's a fair bit of code and concepts, so don't be frustrated if you don't get
+it down the first time. Read through the code again carefully, and reason about
+what gets passed down, and when it gets invoked, and everything should be
+clearer.
+
