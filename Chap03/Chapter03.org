@@ -932,3 +932,50 @@ it down the first time. Read through the code again carefully, and reason about
 what gets passed down, and when it gets invoked, and everything should be
 clearer.
 
+** Touching up
+At this point, we have a basic implementation of a Todo List. You should have a
+general idea of the React model of passing props and event handling now,
+although it'll take practise to get fluent with it. I'd like to end this off
+with one final component for a little polish, a header, which I called title in
+the image. It'll display the number of tasks completed against the total number
+of tasks. Since it's just displaying data, I'll use a functional component.
+#+BEGIN_SRC javascript
+function Header(props) {
+  return (
+    <h1>
+      Your tasks: {props.doneCount}/{props.todoCount}
+    </h1>
+  );
+}
+#+END_SRC
+
+You might think of storing ~doneCount~ and ~todoCount~ in the state of
+~MainApp~, but these are just derived values from the ~todos~ state. Rather than
+maintain the state of these 2 ourselves, let's just calculate their values and
+pass them directly.
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  // ...
+
+  render() {
+    return (
+       <React.Fragment>
++         <Header
++           doneCount={this.state.todos.filter(todo => todo.isDone).length}
++           todoCount={this.state.todos.length}
++         />
+         <form>
+           // ...
+         </form>
+
+         // ..
+       </React.Fragment>
+    )
+  }
+}
+#+END_SRC
+
+And done! This is my end product.
+#+ATTR_HTML: :width 400px
+[[file:final-todolist.jpeg]]
+
