@@ -9,8 +9,8 @@ const Component = ({ name }) => <h1>Hello, {name}!</h1>
 #+END_EXAMPLE
 
 * Learning Objectives
-- [ ] Let learners understand how to "think in React"
-- [ ] Allow learners to gain experience with building a simple React application
+- [X] Let learners understand how to "think in React"
+- [X] Allow learners to gain experience with building a simple React application
 
 * How does React work?
 A HTML document can be represented as a tree of HTML nodes. This tree structure
