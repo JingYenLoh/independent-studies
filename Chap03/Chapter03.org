@@ -9,8 +9,8 @@ const Component = ({ name }) => <h1>Hello, {name}!</h1>
 #+END_EXAMPLE
 
 * Learning Objectives
-- [ ] Let learners understand how to "think in React"
-- [ ] Allow learners to gain experience with building a simple React application
+- [X] Let learners understand how to "think in React"
+- [X] Allow learners to gain experience with building a simple React application
 
 * How does React work?
 A HTML document can be represented as a tree of HTML nodes. This tree structure
@@ -50,7 +50,7 @@ to be completed. We'll be able to add new tasks, as well as toggle the status of
 a task when it's done.
 
 It'll look something like this:
-#+ATTR_HTML: :width 600px
+#+ATTR_HTML: :width 400px
 [[file:todo-list.jpeg]]
 
 ** Hello, Components
@@ -141,7 +141,6 @@ The ~React~ object was brought into the namespace by the following line:
 <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
 #+END_SRC
 
-- [ ] TODO: Inspector shortcuts
 Opening your Element Inspector, we find that the code was compiled into the
 following:
 
@@ -158,7 +157,7 @@ ReactDOM.render(MyFirstElement, document.getElementById('root'));
 And that's it! You've just made your Component Hello World!
 
 ** JSX
-The above code works, but ~createElement~ is rather... unweldly to write. As
+The above code works, but ~createElement~ is rather... unwieldly to write. As
 alluded to in previous chapters, React supports writing Components in an XML
 looking syntax known as JSX. Let's rewrite that using JSX instead. We'll first
 include the library that transpiles JSX to ~createElement~ calls, so add the
@@ -199,6 +198,113 @@ component takes, which is an empty object in this case, and thus we don't really
 see any representation of it in the JSX version. We could as well have passed
 ~null~ in this case.
 
+Note that in a component, you can only have 1 /root element/. That is to say,
+you can't return multiple adjacent elements, or React will complain:
+#+BEGIN_SRC javascript
+// Syntax error: Adjacent JSX elements must be wrapped in an enclosing tag
+function MultipleAdjacentElements() {
+  return (
+    <p>Before my bed, the moon is shining bright,</p>
+    <p>I think that it is frost upon the ground.</p>
+    <p>I raise my head and look at the bright moon,</p>
+    <p>I lower my head and think of home.</p>
+  );
+}
+#+END_SRC
+
+As the error message suggests, you'll need to wrap them in some tag and nest
+them. Usually we end up using ~<div>~ for wrapping things.
+#+BEGIN_SRC javascript
+function MultipleAdjacentElements() {
+  return (
+    <div>
+      <p>Before my bed, the moon is shining bright,</p>
+      <p>I think that it is frost upon the ground.</p>
+      <p>I raise my head and look at the bright moon,</p>
+      <p>I lower my head and think of home.</p>
+    </div>
+  );
+}
+#+END_SRC
+One caveat: you end up with ~div~ littered all over your app, particularly if
+you have to wrap a lot of elements. In best case scenario it's just non-semantic
+HTML. You could be unlucky, however. Once I used a CSS library which relied on
+the ~+~ selector (elements placed immediately after), and because the div was in
+the way, the styling refused to work properly.
+
+[[https://reactjs.org/blog/2017/09/26/react-v16.0.html#new-render-return-types-fragments-and-strings][React 16]] allowed you to return an array of elements instead, but a supplied
+~key~ was necessary. Example directly lifted from React docs:
+#+BEGIN_SRC javascript
+render() {
+  // No need to wrap list items in an extra element!
+  return [
+    // Don't forget the keys :)
+    <li key="A">First item</li>,
+    <li key="B">Second item</li>,
+    <li key="C">Third item</li>,
+  ];
+}
+#+END_SRC
+/Author's note: The syntax is not very intuitive, in my opinion./
+
+In React 16.2, a new feature was introduced: *Fragments*. Fragments are a
+special component in the React library that you can use like any other element,
+but do not get rendered onto the DOM. This was made possible through compiler
+changes in the React library.
+#+BEGIN_SRC javascript
+function MultipleAdjacentElements() {
+  return (
+    <React.Fragment>
+      <p>Before my bed, the moon is shining bright,</p>
+      <p>I think that it is frost upon the ground.</p>
+      <p>I raise my head and look at the bright moon,</p>
+      <p>I lower my head and think of home.</p>
+    <React.Fragment>
+  );
+}
+#+END_SRC
+
+JSX supports HTML attributes, and writing them is pretty similar:
+#+BEGIN_SRC javascript
+function LinkToGoogleComponent() {
+  return (
+    <a href="https://www.google.com">Google</a>
+  )
+}
+#+END_SRC
+The above component, when rendered in the DOM, will be exactly what it looks
+like in the function.
+
+Note, however, that I used the term /similar/. Because JSX is JavaScript
+underneath, it follows the /camelCase/ convention for attributes, rather than
+the convention followed by HTML attributes. For example, the HTML attribute
+~tabindex~ should be written as ~tabIndex~ in JSX.
+#+BEGIN_SRC html
+<!-- In plain HTML -->
+<a href="https://www.w3schools.com/" tabindex="2">W3Schools</a>
+<a href="http://www.google.com/" tabindex="1">Google</a>
+<a href="http://www.microsoft.com/" tabindex="3">Microsoft</a>
+
+<!-- In JSX, you would write tabindex as tabIndex instead -->
+<a href="https://www.w3schools.com/" tabIndex="2">W3Schools</a>
+<a href="http://www.google.com/" tabIndex="1">Google</a>
+<a href="http://www.microsoft.com/" tabIndex="3">Microsoft</a>
+#+END_SRC
+
+Also, some HTML attributes conflict with JavaScript keywords, such as ~class~
+and ~for~. React's solution was to use give them custom attributes that render
+into these HTML attributes instead:
+#+BEGIN_SRC javascript
+// Use htmlFor instead of for
+<label htmlFor="email">Email</label>
+
+// Use className instead of class
+<button type="submit" className="button">Submit</button>
+#+END_SRC
+
+There's other rules as well, but let's not deviate too much. Here's a [[https://reactjs.org/docs/jsx-in-depth.html][link]] to
+JSX in depth if you're interested.
+
 ** Thinking in Components
 So we can write HTML in JavaScript now... cool. Patience. Let's get back to our
 Todo List.
@@ -214,17 +320,671 @@ Done? I decided to break it up into the following:
 [[file:todo-list-broken-down.jpeg]]
 
 - a *Title*, displaying the tasks available and tasks completed,
-- A *form* to add new TODO tasks,
-- and *List* of all the TODO tasks, which is composed of many
-- *TODO task* (s), which have a task name and a check indicating whether it's completed.
+- A *form* to add new Todo tasks,
+- and *List* of all the Todo tasks, which is composed of many
+- *Todo task* (s), which have a task name and a check indicating whether it's completed.
 
 You may already notice that we need to keep track of several things. We'll need
-to keep count of the TODO tasks, whether each individual task is completed, as
+to keep count of the Todo tasks, whether each individual task is completed, as
 well as the count of all tasks and all completed tasks. Going further, we also
 need to track what's being typed into the new task form, so that we know what's
 being submitted. Essentially, we'll need to keep track of the /state/ of several
 things.
 
-** Component State
+** Components, Elements, and State
 Up till now, I've been loosely using the term /Component/ and /Element/. They're
-actually different things.
+actually different things. Let's take our Hello World Component example, which
+we know gets transpiled via Babel into this:
+#+BEGIN_SRC javascript
+const MyFirstElement = React.createElement(
+  'h1',
+  {},
+  'My First React Element!'
+);
+#+END_SRC
+
+As the name would suggest, this creates a React Element. The object it returns
+looks something like this:
+#+BEGIN_SRC javascript
+const MyFirstElement = {
+  key: null,
+  props: {
+    children: 'My First React Element!',
+  },
+  ref: null,
+  type: 'h1',
+};
+#+END_SRC
+which is just a normal JavaScript object with a few properties, namely:
+- a *key*, which is used to identify specific React Elements within a collection,
+- *props*, which are the props that are passed down to the Element,
+- a *ref*, the reference to the underlying DOM element that this React Element is
+  associated with
+- its *type*, which is either a type of HTML element, or a React Component.
+  
+Let's ignore key and ref for now. We'll get to props soon. The point is, the code:
+#+BEGIN_SRC javascript
+const MyFirstElement = <h1>My First React Element!</h1>;
+#+END_SRC
+is really just creating a React Element. So what are Components then?
+
+React Components are instances of the ~React.Component~ class. Recall the
+earlier chapters had an example similar to this:
+#+BEGIN_SRC javascript
+class MyFirstComponent extends React.Component {
+  // ...
+  render() {
+    return <h1>My First React Element!</h1>;
+  }
+}
+#+END_SRC
+The ~MyFirstElement~ function is a component too, but there are some differences
+between it and the above ~MyFirstComponent~ example, which extends from
+~React.Component~. ~MyFirstElement~ simply creates and returns an element, while
+the class based syntax offers the following:
+- *lifecycle hooks*, which I'll cover in the next chapter
+- *state*, where you can keep track of pieces of state specific to an instance
+  of the component
+
+Because ~MyFirstElement~ doesn't keep track of state, but simply display data,
+many names have been invented for it, such as /stateless functional components/
+and /dumb components/. The official docs calls them /functional components/. The
+similarity between them, though, is that they're both functions that return
+Elements.
+
+We know our app needs to track of our Todo tasks, which counts as state, so
+let's write a Component for it. I'll call it ~MainApp~, because I'm not a
+creative person. A Component must always have a ~render~ method, so let's put a
+placeholder implementation as well.
+#+BEGIN_SRC javascript
+class MainApp extends React.Component {
+  render() {
+    return <MyFirstElement />;
+  }
+}
+#+END_SRC
+Notice we're returning ~MyFirstElement~. That's how you /compose/ elements in
+React to build bigger things. Notice that the components you've written all
+start with uppercase (~MyFirstElement~, ~MyFirstComponent~, and ~MainApp~). In
+React, it's necessary for user-defined components to start with an uppercase
+letter. This is because React might infer lowercase tags as plain HTML tags. The
+[[https://reactjs.org/docs/jsx-in-depth.html#user-defined-components-must-be-capitalized][official docs]] has a section about this in more detail.
+
+We know our app has to track your Todo tasks, where a single task consists of a
+task name and whether it's done. In code, it could be represented in this
+format:
+#+BEGIN_SRC javascript
+const task = {
+  taskName: 'Walk the dog',
+  isDone: false,
+};
+#+END_SRC
+
+We have no tasks atm, so let's initialize the state with some tasks. In React,
+component state is usually initialized in the constructor:
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
++  constructor(props) {
++    super(props);
++    this.state = {
++      // Just some hardcoded tasks off the top of my mind :)
++      todos: [
++        { taskName: "Explain JSX", isDone: true },
++        { taskName: "Demo React", isDone: false },
++        { taskName: "Explain Lifecycle", isDone: false },
++        { taskName: "Explain state", isDone: false },
++      ],
++    };
++  }
++
+  render() {
+    return <MyFirstElement />;
+  }
+}
+#+END_SRC
+A constructor always takes in ~props~, which will be passed to the ~Component~
+class in a ~super(props)~ call. This is some necessary boilerplate for React to
+know how to deal with the props, and propagate an update when necessary. It's
+also possible to write it this way, using some new syntax, and avoid some
+boilerplate:
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
++  state = {
++    todos: [
++      { taskName: "Explain JSX", isDone: true },
++      { taskName: "Demo React", isDone: false },
++      { taskName: "Explain Lifecycle", isDone: false },
++      { taskName: "Explain state", isDone: false },
++    ],
++  };
++
+  render() {
+    return <MyFirstElement />;
+  }
+}
+#+END_SRC
+
+** Props
+I'll stick to the constructor for now, though. So we have some Todo tasks now,
+but it's not being displayed. Let's fix that. We know we want to have a list,
+and a single Todo task. I decided to name the single Todo task a ~TodoItem~,
+which will take in the /props/ ~taskName~ and ~isDone~.
+#+BEGIN_SRC javascript
+// Represents a single Todo task
+function TodoItem(props) {
+  return (
+    <div>
+      <span>{props.taskName}</span>
+      <input
+        type="checkbox"
+        checked={props.isDone}
+      />
+    </div>
+  );
+}
+#+END_SRC
+
+/Props/ is short for "properties", which is a collection of arbitrary inputs
+that are passed to a React Component. A single property could be any JavaScript
+object, and by extension that includes strings, booleans, arrays, plain old
+objects, and even functions. So you could even pass another Component as prop,
+since they're just JavaScript functions. Props are how you pass data around to
+/children/ components from a /parent/. So the above ~TodoItem~ had 2 props,
+~taskName~, which will be a string in our case, and a boolean ~isDone~ to
+represent whether the task is completed.
+
+You pass props simply by putting them as an value to a JSX attribute. The prop
+name is arbitrary, although if you pass a prop to a HTML reserved keyword,
+the attribute will take the value of the prop:
+#+BEGIN_SRC javascript
+// Intentionally naming differently to show what's passed
+const nameOfTask = 'Walk the dog';
+const isTaskDone = false;
+
+// Passing props to TodoItem
+<TodoItem taskName={nameOfTask} isDone={isTaskDone} />
+#+END_SRC
+
+When the above ~TodoItem~ instance is rendered onto the DOM itself, it'll look
+something like this:
+#+BEGIN_SRC html
+<div>
+  <span>Walk the dog</span>
+  <input
+    type="checkbox"
+    checked="false"
+  />
+</div>
+#+END_SRC
+
+As you work more with React, you'll get all sorts of props passed to you. 
+
+** Expressions
+Now let's also make a collection of tasks, which will take in a list of todos as
+a prop:
+#+BEGIN_SRC javascript
+function TodoItems(props) {
+  return (
+    <ul>
+      {props.todos.map(todo => (
+        <li key={todo.taskName}>
+          <TodoItem taskName={todo.taskName} isDone={todo.isDone} />
+        </li>
+      ))}
+    </ul>
+  )
+}
+#+END_SRC
+
+Notice the syntax, beginning with ~{~ and ending with ~}~. That's how you embed
+JS /expressions/ inside JSX. [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Expressions#Expressions][MDN docs]] defines an expression as /any valid unit
+of code that resolves to a value/. Essentially, the expression that you embed
+has to /return/ a proper value. Here's some examples to help you visualize:
+#+BEGIN_SRC javascript
+// Valid, since 3 is a literal value
+<div>{3}</div>
+
+// Valid
+const str = 'Hello!';
+<div>{str}</div>
+
+// Valid, since functions are values. In fact, this is extremely common in React
+// and we'll be using it later
+function alertClicked() {
+  window.alert('I was clicked!')
+}
+
+<button onClick={alertClicked} />
+  
+// The following is invalid, because an if expression doesn't return a value
+<div>
+  {if (1 === 2) return 'One equals two!'
+  else return 'One is not equal to two.'}
+</div>
+  
+// Instead, we could use a ternary operator to do the conditional rendering
+<ul>
+  {1 === 2 ? 'One equals two!' : 'One is not equal to two.'}
+</ul>
+
+#+END_SRC
+
+It may come as a eureka moment that the ~{}~ in JSX props are also simply embed
+expressions, so any valid expression works when passing props as well.
+
+Now, let's use those components we've written in our ~MainApp~:
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  // constructor(props) { ...
+
+  render() {
+-    return <MyFirstElement />;
++    return <TodoItems todos={this.state.todos} />
+  }
+}
+#+END_SRC
+
+Save your work and Browsersync should refresh the page, which might look
+something like this now:
+#+ATTR_HTML: :width 400px
+[[file:todoitems.jpeg]]
+
+That's my list of Todos, rendered onto the DOM by React. Huzzah!
+
+** Forms
+We're able to display some tasks now, but it's all hardcoded. We aren't able to
+add new tasks as well, so let's remedy that. We'll use a classic HTML form to
+add new tasks. We know a task has a ~taskName~, and if we're adding something to
+our Todo list, logically it's not done yet, so we won't need that in our form.
+I'll start it off within the ~MainApp~. Here's my initial implementation:
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+// ...
+
+  render() {
+-    return <TodoItems todos={this.state.todos} />
++    return (
++       <React.Fragment>
++
++         <form>
++           <label htmlFor="taskName">
++             New task:
++             <input
++               name="taskName"
++               type="text"
++               value=""
++             />
++           </label>
++           <input type="submit" value="Add Todo" />
++         </form>
++
++         <TodoItems todos={this.state.todos} />
++       </React.Fragment>
++    )
+  }
+}
+#+END_SRC
+Notice that I have to wrap ~MainApp~ in a Fragment now, because we can't have
+multiple adjacent elements. Save the file, and Browsersync updates to show
+something like this:
+#+ATTR_HTML: :width 400px
+[[file:initial-form.jpeg]]
+
+We'll need to know what task name was typed in, a.k.a. keep track of its state,
+so we add a new property to the state and update the value to reference that
+state.
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      todos: [
+        { taskName: "Explain JSX", isDone: true },
+        { taskName: "Demo React", isDone: false },
+        { taskName: "Explain Lifecycle", isDone: false },
+        { taskName: "Explain state", isDone: false },
+      ],
++      taskName: '', // empty by default
+    };
+  }
+
+  render() {
+    return (
+       <React.Fragment>
+
+         <form>
+           <label htmlFor="taskName">
+             New task:
+             <input
+               name="taskName"
+               type="text"
+-               value=""
++               value={this.state.taskName}
+             />
+           </label>
+           <input type="submit" value="Add Todo" />
+         </form>
+
+         <TodoItems todos={this.state.todos} />
+       </React.Fragment>
+    )
+  }
+}
+#+END_SRC
+
+*** Updating state
+Save the file. React is now aware of the input's state, but we have another
+problem now. Try typing something, and you'll find that the input stubbornly
+remains empty. We'll need to handle the keypress event, and tell React how to
+update the state according to the change in the input. React has an ~onChange~
+attribute for text inputs. We'll write a function to handle the change, commonly
+known as a /handler function/, and set the ~onChange~ attribute to that
+function:
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  // constructor(props) { ...
+  // } ...
+
++  updateTaskName(event) {
++    const updatedTaskName = event.target.value;
++    this.setState({ taskName: event.target.value });
++  }
++
+  render() {
+    return (
+      // ...
+        <input
+          name="taskName"
+          type="text"
+          value={this.state.taskName}
+          // handle the change event
++          onChange={this.updateTaskName}
+        />
+      // ...
+    )
+  }
+}
+#+END_SRC
+We don't call ~updateTaskName()~ in the ~onChange~ attribute. Instead, we pass
+the function as an argument, and let React decide when to invoke it.
+
+Let's break down ~updateTaskName~. It takes in an argument ~event~. When the
+input text changes, an event is dispatched, and this is passed as an argument to
+the handler. From there, we retrieve the updated text in the input field, and
+bind it to a variable ~updatedTaskName~. We then call the ~setState~ function.
+~setState~ takes an argument of the next state, which it uses to update the
+state itself. Notice that we're only passing the updated task name in the next
+state, and not our ~todos~. If a property isn't received in the next state,
+React infers that it's unchanged, so we don't have to pass the entire state
+object every time we're calling ~setState~.
+
+We have one last thing to do. When we invoke ~updateTaskName~ from ~render~, the
+context is bound to ~render~. We'll have to [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind][bind]] the context to ~MainApp~
+instead.
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      todos: [
+        { taskName: "Explain JSX", isDone: true },
+        { taskName: "Demo React", isDone: false },
+        { taskName: "Explain Lifecycle", isDone: false },
+        { taskName: "Explain state", isDone: false },
+      ],
+      taskName: '', // empty by default
+    };
++    this.updateTaskName = this.updateTaskName.bind(this);
+  }
+}
+#+END_SRC
+
+Save the file, and try typing in the input. It should update as normal now. To
+check if the state is getting properly updated, we can add a callback to log the
+taskName after the state has been set.
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  // constructor(props) { ...
+  // } ...
+
+  updateTaskName(event) {
+    const updatedTaskName = event.target.value;
+-    this.setState({ taskName: event.target.value });
++    this.setState({ taskName: event.target.value }, () => console.log(this.state.taskName));
+  }
+
+  // ...
+}
+#+END_SRC
+Try typing in the input, and the state should be logged in the console.
+
+Now we're able to track the taskName, but we still need to be able to submit the
+form. React has an ~onSubmit~ attribute for forms. We'll use the same way to
+handle the form submit.
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  constructor(props) {
+    // ..
+    this.updateTaskName = this.updateTaskName.bind(this);
++    this.addNewTask = this.addNewTask.bind(this);
+  }
+
++  addNewTask(event) {
++    event.preventDefault();
++    this.setState({
++      todos: [
++        { taskName: this.state.taskName, isDone: false },
++        ...this.state.todos,
++      ]
++    });
++  }
+
+   render() {
+     return (
+       // ...
+
+-        <form>
++        <form onSubmit={this.addNewTask}>
+          // ...
+        </form>
+       // ...
+     )
+   }
+}
+#+END_SRC
+
+We create a handle for ~onSubmit~, named ~addNewTask~. For the first statement,
+we run ~event.preventDefault~. By default, form submissions target the current
+page if an action isn't specified, and reloads the page. We don't want the page
+reloading, so we prevent the default behavior. We then call the ~setState~
+function. This time, we're passing the ~todos~ property. The new ~todos~ has a
+todo task at the start, with the current ~taskName~ in the state, and ~isDone~
+initialized to false, followed by the /rest/ of the current ~todos~ state.
+
+Save the page, and you should be able to add new tasks now. However, the
+~taskName~ isn't cleared away after adding the new task. That isn't a very good
+user experience. We'll fix that by setting ~taskName~ to an empty string *after*
+we've created the new task.
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  // ..
+
+  addNewTask(event) {
+    event.preventDefault();
+    this.setState({
+      todos: [
+        { taskName: this.state.taskName, isDone: false },
+        ...this.state.todos,
+      ]
+-    });
++    }, this.setState({ taskName: '' }));
+  }
+
+   render() {
+     // ...
+   }
+}
+#+END_SRC
+
+** Returning a handler in a handler
+Things are definitely better now, but we're not quite done yet. We still can't
+toggle whether a task is done, and that's not a very useful Todo list. Let's
+work on that. To update the ~isDone~ state of a task in the list, we need to
+tell React which task changed. One straightforward way is to use the index of
+the task. We can retrieve that as the second argument in the function passed to
+~map~. Here's how I implemented it.
+#+BEGIN_SRC diff
+function TodoItem(props) {
+  return (
+    <div>
+      <span>{props.taskName}</span>
+      <input
+        type="checkbox"
+        checked={props.isDone}
++        onChange={props.toggleIsDone}
+      />
+    </div>
+  );
+}
+
+function TodoItems(props) {
+  return (
+    <ul>
+-      {props.todos.map(todo => (
++      {props.todos.map((todo, index) => (
+        <li key={todo.taskName}>
+-          <TodoItem taskName={todo.taskName} isDone={todo.isDone} />
++          <TodoItem
++            taskName={todo.taskName}
++            isDone={todo.isDone}
++            toggleIsDone={props.toggleIsDone(index)}
++          />
+        </li>
+      ))}
+    </ul>
+  )
+}
+class MainApp extends React.Component {
+  constructor(props) {
+    // ...
+    this.updateTaskName = this.updateTaskName.bind(this);
++    this.toggleIsDone = this.toggleIsDone.bind(this);
+  }
+
+  // ...
+
++  toggleIsDone(index) {
++    return (event) => {
++      const todos = [...this.state.todos];
++      todos[index] = { ...this.state.todos[index], isDone: event.target.checked };
++      this.setState({ todos: todos });
++    }
++  }
++
+
+  // ...
+
+  render() {
+    return (
+      // ...
+-        <TodoItems todos={this.state.todos} />
++        <TodoItems todos={this.state.todos} toggleIsDone={this.toggleIsDone} />
+      // ...
+    );
+  }
+}
+#+END_SRC
+
+Let's go through that step by step. We implement a ~toggleIsDone~ handler, and
+bind it as usual. This time, however, we don't call ~setState~ immediately, and
+the argument isn't an event. Instead, it returns a function that handles the
+event. How does this work?
+
+Let's look at what calls ~toggleIsDone~. We pass it to ~TodoItems~, which passes
+it down again as a prop ~toggleIsDone~, and also calls the function with an
+argument of the current index of the item in ~todos~. Because ~toggleIsDone~
+gets invoked here, we're actually passing down the function that ~toggleIsDone~
+returned as the prop.
+
+Finally, in ~TodoItem~, we set the ~onChange~ for the checkbox to be the
+function passed down. Let's look at the code for this handler. In the first
+line, we make a copy of the current ~todos~:
+#+BEGIN_SRC javascript
+const todos = [...this.state.todos];
+#+END_SRC
+
+We then update the task that the checkbox was toggled on, using the spread
+syntax to clone the object and override its ~isDone~ property with the event's:
+#+BEGIN_SRC javascript
+todos[index] = { ...this.state.todos[index], isDone: event.target.checked };
+#+END_SRC
+
+Finally, we update the state.
+#+BEGIN_SRC javascript
+this.setState({ todos: todos });
+#+END_SRC
+
+Save the page, and try toggling those checkboxes. They should all be working
+now!
+
+That's a fair bit of code and concepts, so don't be frustrated if you don't get
+it down the first time. Read through the code again carefully, and reason about
+what gets passed down, and when it gets invoked, and everything should be
+clearer.
+
+** Touching up
+At this point, we have a basic implementation of a Todo List. You should have a
+general idea of the React model of passing props and event handling now,
+although it'll take practise to get fluent with it. I'd like to end this off
+with one final component for a little polish, a header, which I called title in
+the image. It'll display the number of tasks completed against the total number
+of tasks. Since it's just displaying data, I'll use a functional component.
+#+BEGIN_SRC javascript
+function Header(props) {
+  return (
+    <h1>
+      Your tasks: {props.doneCount}/{props.todoCount}
+    </h1>
+  );
+}
+#+END_SRC
+
+You might think of storing ~doneCount~ and ~todoCount~ in the state of
+~MainApp~, but these are just derived values from the ~todos~ state. Rather than
+maintain the state of these 2 ourselves, let's just calculate their values and
+pass them directly.
+#+BEGIN_SRC diff
+class MainApp extends React.Component {
+  // ...
+
+  render() {
+    return (
+       <React.Fragment>
++         <Header
++           doneCount={this.state.todos.filter(todo => todo.isDone).length}
++           todoCount={this.state.todos.length}
++         />
+         <form>
+           // ...
+         </form>
+
+         // ..
+       </React.Fragment>
+    )
+  }
+}
+#+END_SRC
+
+And done! This is my end product.
+#+ATTR_HTML: :width 400px
+[[file:final-todolist.jpeg]]
+
+* Exercises
+1. A Todo list isn't very versatile if you can't remove tasks from it. Implement
+   task removal for the list. *Hint:* Have a remove button for every task, and
+   have an ~onPress~ handler for it. Look into the ~Array.prototype.slice~
+   method as well.
+2. Extract the form into its own component. *Hint:* Pass the handlers as props.
+3. The ~toggleIsDone~ implementation works, but is rather clunky. Refer to the
+   [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice][slice]] method again. Is there a way to write the code for ~toggleIsDone~,
+   using slice?
