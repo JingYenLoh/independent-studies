@@ -103,3 +103,56 @@ cra-todolist
 ~node_modules~ contains the dependencies for this project. If you look inside
 you'll find a whole bunch of folders inside. Each folder is a library by itself,
 and you'll notice they have their own ~package.json~. 
+
+The ~/public~ folder contains your ~index.html~, a placeholder ~favicon.ico~,
+and a ~manifest.json~ file, which is a file that describes your web application
+and is part of the /Progressive Web Apps/ technology. You /could/ place some
+static assets such as images here, but CRA actually recommends importing them
+dyanmically via ~import~ statements in the code instead. In practice, when
+building apps for school related projects, I only hop into this folder to modify
+the ~index.html~ to add scripts via a CDN (because not everything is on npm).
+
+The ~.gitignore~ file is a file to tell /git/ to ignore certain files in this
+project. Git is a version control system, commonly used for tracking changes to
+source code. Since git's role is primarily to version control source code,
+there's files which aren't its responsibility (e.g. build artifacts), and this
+~.gitignore~ file tells git not to track changes in those files.
+
+And finally, the ~/src~ folder. ~src~ is an abbreviation for source, and is a
+common convention in many programming languages to keep your source code within
+a ~/src~ folder. CRA generated the following files in this folder:
+- ~App.css~
+- ~App.js~
+- ~App.test.js~
+- ~index.css~
+- ~logo.svg~
+- ~registerServiceWorker.js~
+  
+~index.js~ is the entry point to our app, and as expected it has our
+~ReactDOM.render~ line, which renders ~<App />~ onto the DOM. ~App.js~ contains
+the source of this component. Let's take a look at it:
+#+BEGIN_SRC javascript
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">Welcome to React</h1>
+        </header>
+        <p className="App-intro">
+          To get started, edit <code>src/App.js</code> and save to reload.
+        </p>
+      </div>
+    );
+  }
+}
+
+export default App;
+#+END_SRC
+Notice that we're importing SVG and CSS files. This is made possible by Webpack
+behind the scene, which was configured by CRA to handle such files. 
