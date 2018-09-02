@@ -155,4 +155,323 @@ class App extends Component {
 export default App;
 #+END_SRC
 Notice that we're importing SVG and CSS files. This is made possible by Webpack
-behind the scene, which was configured by CRA to handle such files. 
+behind the scene, which was configured by CRA to handle such files. The
+~App.test.js~ is a test file for /unit tests/, and I'll briefly discuss it later.
+
+** Running the app
+In ~package.json~, you should notice a ~script~ section. Defined package scripts
+can be executed by the package manager via the ~run~ command, e.g. to run the
+~start~ script, you would type ~npm run start~ in your command line and press
+enter. This would execute whatever was specified as the value of ~start~, which
+in this case was "~react-scripts start~". Therefore, ~npm run start~ pretty much
+is just a way to execute ~react-scripts-start~.
+
+Run the ~start~ script with ~npm run start~, and your React app should launch in
+your default browser:
+
+#+ATTR_HTML: :width 600px
+[[file:npm-run.PNG]]
+
+Let's make an edit to the ~App.js~.
+#+BEGIN_SRC diff
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+-          <h1 className="App-title">Welcome to React</h1>
++          <h1 className="App-title">Hello, create-react-app!</h1>
+        </header>
+        <p className="App-intro">
+          To get started, edit <code>src/App.js</code> and save to reload.
+        </p>
+      </div>
+    );
+  }
+}
+
+export default App;
+#+END_SRC
+
+Save the changes, and your browser should automatically reload to update with
+the changes, similar to what happened with Browsersync, if you used it in the
+last chapter.
+
+#+ATTR_HTML: :width 600px
+[[file:npm-run-edited.PNG]]
+
+This is made possible through webpack's dev server, which has /hot-reload/
+capabilites, refreshing the server when file changes were detected. This is one
+of the reasons why frontend web development can be so rapid, because changes are
+quickly visible.
+
+** Chapter Exercise: Porting our Todo List
+Let's get our hands dirty with CRA. Remember the Todo List we did in Chapter 3?
+Let's bring that over to this project. Recall that we have multiple components.
+One common way to split up a React codebase is to have one JavaScript file per
+component, and group it in the same folder with its CSS and assets, for example,
+we could shift all the ~App~ dependencies to its own folder. Typically, I like
+to have a ~components~ folder within ~src~, to place all components. For
+example, this is how I could move ~App~ into a ~components~ folder:
+#+BEGIN_EXAMPLE
+cra-todolist
+└── src
+    ├── components
+    │   └── App
+    │       ├── App.css
+    │       ├── App.js
+    │       ├── logo.svg
+    │       └── App.test.js
+    ├── index.css
+    ├── index.js
+    ├── logo.svg
+    └── registerServiceWorker.js
+#+END_EXAMPLE
+
+One disadvantage of doing this is that my import statements repeat the filename
+after the Folder name, e.g. to import ~App.js~ from ~index.js~, I would have to
+do the following:
+#+BEGIN_SRC javascript
+// index.js
+
+import App from './components/App/App'; // App is repeated twice
+#+END_SRC
+You're free to structure your project as you wish, CRA doesn't have any
+restrictions other than requiring source code to be within the ~src~ folder.
+
+Following the above structure, you would end up with something like this when
+porting the project.
+#+BEGIN_EXAMPLE
+cra-todolist
+└── src
+    ├── components
+    │   ├── MainApp
+    │   │   └── MainApp.js
+    │   ├── Header
+    │   │   └── Header.js
+    │   ├── TodoItem
+    │   │   └── TodoItem.js
+    │   ├── TodoItems
+    │   │   └── TodoItems.js
+    │   └── NewTodoForm
+    │       └── NewTodoForm.js
+    ├── index.css
+    ├── index.js
+    ├── logo.svg
+    └── registerServiceWorker.js
+#+END_EXAMPLE
+Rather than delete ~App~, I'd just rename it ~MainApp~ and replace it with our
+~MainApp~ component.
+
+You should be able to pretty much copy paste each Component function into their
+own file. Take note that you'll neeed to import the React library to be able to
+use JSX though. You'll need to export the functions, or other modules won't be
+able to import them. For example, ~Header.js~ would look something like this:
+#+BEGIN_SRC javascript
+// Header.js
+import React from 'react';
+
+function Header(props) {
+  return (
+    <h1>
+      Your tasks: {props.doneCount}/{props.todoCount}
+    </h1>
+  );
+}
+
+// Export component to make it available for use in other files
+export default Header;
+#+END_SRC
+
+And ~MainApp.js~ would import the ~Header~ component, as well as several other
+components. For convenience, we also destructure ~Component~ and ~Fragment~ when
+importing from the React library:
+#+BEGIN_SRC javascript
+// MainApp.js
+
+import React, { Component, Fragment } from 'react';
+
+// .. to go up one directory, then enter the Header folder, and import Header from the Header.js file
+import Header from '../Header/Header';
+
+// import other components as well
+import TodoItems from '../TodoItems/TodoItems';
+import NewTodoForm '../NewTodoForm/NewTodoForm';
+
+class MainApp extends Component {
+  // ...
+
+  render() {
+    return (
+      {/* We're able to just use Fragment, rather than React.Fragment now */}
+      <Fragment>
+
+        <Header
+          doneCount={this.state.todos.filter(todo => todo.isDone).length}
+          todoCount={this.state.todos.length}
+        />
+
+        // ...
+      </Fragment>
+    )
+  }
+}
+#+END_SRC
+
+Remember to update the import path in ~index.js~ as well, now that we've
+effectively moved ~App.js~ into a ~components~ folder, as well as renamed it.
+#+BEGIN_SRC diff
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+-import App from './App';
++import MainApp from './components/MainApp/MainApp;
+import registerServiceWorker from './registerServiceWorker';
+
+-ReactDOM.render(<App />, document.getElementById('root'));
++ReactDOM.render(<MainApp />, document.getElementById('root'));
+registerServiceWorker();
+#+END_SRC
+
+I won't provide the code for all the files, but porting them should be
+straightforward. If you get errors such as module not found, remember to export
+the necessary functions, and read the error message to make sure you're
+importing from the correct path. When you're done, it should look the same as
+your previous app:
+
+#+ATTR_HTML: :width 600px
+[[file:d:/independent-studies/Chap03/final-todolist.jpeg]]
+
+** Building your app for deployment
+~npm run start~ runs the app in development mode, where the environment is
+optimized for development. When you're ready to deploy your app in production,
+however, there's many optimizations that can be made. You wouldn't want to
+deploy your app as multiple JavaScript files, or the client would have to make a
+request for every single file. You'd ideally not send JSX over, and let them
+have to transpile it to plain JavaScript. There's also a lot of possible
+optimizations, for example, you could /minify/ the file to ensure the least
+amount of Javascript is sent over, allowing the page to receive and load all the
+content sooner.
+
+~npm run build~ is exactly the command for that. It bundles the app and does a
+bunch of optimizations for the build.
+
+Try running the command. After a while, you should see something like the
+following output:
+#+BEGIN_EXAMPLE
+$ react-scripts build
+Creating an optimized production build...
+Compiled successfully.
+
+File sizes after gzip:
+
+  36.95 KB  build\static\js\main.37596ea7.js
+  299 B     build\static\css\main.c17080f1.css
+
+The project was built assuming it is hosted at the server root.
+You can control this with the homepage field in your package.json.
+For example, add this to build it for GitHub Pages:
+
+  "homepage" : "http://myname.github.io/myapp",
+
+The build folder is ready to be deployed.
+You may serve it with a static server:
+
+  yarn global add serve
+  serve -s build
+
+Find out more about deployment here:
+
+  http://bit.ly/2vY88Kr
+
+Done in 10.27s.
+#+END_EXAMPLE
+
+If you look at your project, you should see a new folder named ~build~, with the
+following structure:
+#+BEGIN_EXAMPLE
+build
+└── static
+    ├── css
+    │   ├── main.c17080f1.css
+    │   └── main.c17080f1.css.map
+    ├── js
+    │   ├── main.37596ea7.js
+    │   └── main.37596ea7.js.map
+    ├── media
+    │   └── logo.5d5d9eef.svg
+    ├── asset-manifest.json
+    ├── favicon.ico
+    ├── index.html
+    ├── manifest.json
+    └── service-worker.js
+#+END_EXAMPLE
+If you open the .css or .js files, you'll notice they seem like glibberish.
+That's your code/styling, with all its dependencies bundled in and minified for
+a much smaller file size. The .map files are /Source Maps/, to allow you to
+/map/ your combined/minified file back to an unbuilt state. This is useful for
+debugging your production build, because otherwise those minified files are
+pretty much unreadable for the average person (hardcore reverse engineers not
+included).
+
+In addition, you'll notice those files have some glibberish, like ~c17080f1~.
+Those are /content hashes/, and they change when the file is modified. This is
+helpful for browsers, because browsers often cache static files, and when the
+hash has changed, the browser knows the file has changed and it can discard the
+cached version. Notice that the SVG file also has a content hash.
+
+The ~build~ folder is what you'll want to be serving in production. The
+documentation includes [[https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#deployment][deployment instructions]] on several different cloud
+providers, and you can follow the instructions on any of them to get your app
+running on the Internet.
+
+** Testing your components
+CRA comes bundled with Jest for testing. Jest is a /test runner/, which is a
+program that looks for /tests/ and executes them. We test programs to ensure
+they are executing as intended, and we write unit tests and run them via the
+test runner to ensure our code continues behaving as expected when we have
+changed something.
+
+Unit testing is unfortunately beyond the scope of this independent studies, but
+CRA has some [[https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#running-tests][basic documentation]] on working with Jest.
+
+** Configuring
+CRA abstracts a lot of the plumbing underneath away, but there may come a time
+where you need to be able to modify the configurations. ~npm run eject~ is the
+command for that. Try creating a new project with CRA and ejecting that project
+immediately. You'll notice the following folders added:
+- ~config~
+- ~scripts~
+
+Opening them, you'll find different config files, e.g. the webpack
+configuration, as well as the running, build, and test scripts. These are all
+exposed to you now and you'll be free to modify them as you wish.
+
+Like testing, configuration is out of the scope for this Independent Studies.
+
+/Author's note: For SP projects at least, it's unlikely that you'll need to eject. If you require a specific feature, check through the documentation and see if it's possible to set it up without ejecting. For example, you may want to use CSS preprocessors such as SASS. At first glance it may seem necessary to eject and modify the build configuration, but a [[https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc][workaround]] is actually documented in the README./
+
+** Misc
+My intention for this chapter were just to cover the basics of working with CRA.
+The bundled [[https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#running-tests][README.md]] comes with much more documentation, and goes into the
+specifics of working with different aspects of CRA. It even links to several
+external tutorials contributed by the community. I highly recommend the reader
+takes some time to browse through the README and at least get a general idea of
+what CRA provides, and what it does not.
+
+* Exercises
+1. I only recommended reading it, but seriously, go and read the CRA
+   documentation. There's a lot of nuggets of knowledge there that can help u
+   intuitively grasp aspects of frontend web development, simply by osmosis.
+2. Try having some fun with the Todo List app. Add some styling to each
+   component. Use a CSS library like Bootstrap if you wish, and figure out how
+   to place it together in a CRA generated app.
+3. React was written by Facebook, and naturally one of the places React is used
+   is the Facebook web app itself. Go to a Facebook page, and try to think of
+   how the page would be structured if it was written in React. Which elements
+   can form a component? What kind of state is shared amongst multiple components?
