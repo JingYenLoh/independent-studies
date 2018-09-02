@@ -4,6 +4,12 @@
 #+EMAIL: lohjingyen.16@ichat.sp.edu.sg
 #+DATE: June 2018
 
+* Learning Objectives
+- [X] Give learners general overview of ~create-react-app~
+  - [X] Understand basic commands ~run, build, test~
+  - [X] Have idea of how to structure files and folders
+  - [X] Have general idea of what each generated file is
+
 * create-react-app
 Earlier, we manually created a HTML page and included the React libraries from a
 CDN. That worked fine, but as you work on bigger projects you'll want to
