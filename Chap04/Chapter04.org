@@ -345,7 +345,7 @@ importing from the correct path. When you're done, it should look the same as
 your previous app:
 
 #+ATTR_HTML: :width 600px
-[[file:d:/independent-studies/Chap03/final-todolist.jpeg]]
+[[file:../Chap03/final-todolist.jpeg]]
 
 ** Building your app for deployment
 ~npm run start~ runs the app in development mode, where the environment is
