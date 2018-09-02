@@ -1,0 +1,15 @@
+#+TITLE: Chapter05
+#+SUBTITLE: Component Lifecycles
+#+AUTHOR: Jing Yen Loh
+#+EMAIL: lohjingyen.16@ichat.sp.edu.sg
+#+DATE: August 2018
+
+* Learning Objectives
+- [ ] Let learners understand lifecycle hooks and how to use each one
+  - [ ] componentDidMount
+
+* Lifecycles
+Lorem ipsum
+
+* Exercises
+1. Lorem ipsum
