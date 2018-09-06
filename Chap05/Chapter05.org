@@ -5,11 +5,496 @@
 #+DATE: August 2018
 
 * Learning Objectives
-- [ ] Let learners understand lifecycle hooks and how to use each one
-  - [ ] componentDidMount
+- [X] Let learners understand common lifecycle hooks and how to use each one
+  - [X] Mounting
+  - [X] Updating
+  - [X] Unmounting
 
 * Lifecycles
-Lorem ipsum
+A React Component has a /lifecycle/. From when the component is first
+initialized, to when the component is mounted and able to interact with the
+user, to when the component is destroyed, a component can be in different stages
+of its lifecycle.
+
+Beginners learning React sometimes think that the ~render~ method has the
+responsibility of creating an instance of a Component and mounting it to the
+DOM. While a reasonable assumption, the actual process is a little more
+complicated.
+
+A Component's lifecycle can be thought of in 3 phases, *mounting*, *updating*,
+and *unmounting*. We'll go through each of them in this chapter. At different
+stages of a Component's lifecycle, React has declared several /lifecycle
+methods/, or /lifecycle hooks/, as they're sometimes referred to as. You can
+override these methods to run operations at particular times in the process.
+
+After some consideration, I've decided not to cover the entirety of the methods,
+and instead focus on the common ones. If you're interested, the [[https://reactjs.org/docs/react-component.html][official docs]]
+details all the lifecycle hooks in their entirety.
+
+The following image of React's lifecycle was kindly created by Dan Abramov,
+co-author of Redux, a state management library commonly paired with React. At
+the time of writing, Dan is part of the React team and often posts news related
+to React on Twitter, so give him a follow [[https://twitter.com/dan_abramov/][there]] if you want to keep updated with
+React development.
+#+ATTR_HTML:
+[[file:lifecycle.jpg]]
+
+** Mounting
+Even before the component gets displayed on the screen, there are several
+methods on the component being invoked, in the following order:
+- ~constructor~
+- ~getDerivedStateFromProps~
+- ~render~
+- ~componentDidMount~
+
+*** constructor
+Strictly, this isn't really a React specific lifecycle method. It just happens
+that the constructor is naturally invoked, when creating instances of a React
+Component. This is the first method that is called before a React Component is
+mounted.
+
+The constructor is where we define the initial props and state. For example, in
+our Todo List, our ~MainApp~ component had the following:
+#+BEGIN_SRC javascript
+class MainApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      newTaskName: "",
+      todos: [
+        { taskName: "Explain JSX", isDone: true },
+        { taskName: "Demo React", isDone: false },
+        { taskName: "Explain Lifecycle", isDone: false },
+        { taskName: "Explain state", isDone: false },
+      ],
+    };
+    this.updateTaskName = this.updateTaskName.bind(this);
+    this.addNewTodo = this.addNewTodo.bind(this);
+    this.toggleIsDone = this.toggleIsDone.bind(this);
+  }
+
+  // ...
+}
+#+END_SRC
+The ~super(props)~ is necessary for React to be aware about the props in the
+component. Even though we didn't pass any props to ~MainApp~, this call is still
+necessary. The ~this.state~ declaration declares the /initial state/ of this
+component.
+
+The subsequent statements bind the context of several methods to the ~MainApp~
+component itself, and are not related to the state or props passed.
+*** render
+This is the only method that is *required* in a React class Component. The
+~render~ method returns a React Element, which has access to the props and state
+of the component. The documentation recommends keeping ~render~ /pure/. This
+means that ~render~ should not perform any /side-effects/, and it should only
+work on returning an element. ~render~ shouldn't perform any network requests,
+nor should it modify any state/props.
+
+*** componentDidMount
+The last lifecycle method in the mounting phase, this is called once our
+Component instance is mounted onto the ui in its entirety. At this stage, we'll
+be able to interact with the Native UI, which in the case of React web will be
+the DOM.
+
+This is the lifecycle method where you'll want to be doing operations that
+interact with the DOM. For example, you may be using a third party library that
+doesn't have React integration. This is where you can register event listeners
+for them. Another common use case would be making AJAX requests to a REST API.
+
+/Author's note: This is likely the lifecycle method that you will be using most often, because making network requests and integrating non-React third party libraries are extremely common operations./
+
+** Updating
+When the props (passed via parents) or state changes (via ~this.setState~), an
+update is triggered, and the following methods are invoked in this order:
+- ~getDerivedStateFromProps~
+- ~shouldComponentUpdate~
+- ~render~
+- ~getSnapshotBeforeUpdate~
+- ~componentDidUpdate~
+
+We'll only cover some of them.
+
+*** shouldComponentUpdate
+The official documentation lists this as a less commonly used lifecycle, but I'm
+including this because this an interesting one. As the name suggests, this
+method returns a boolean of whether the component should update, or re-render.
+By default, this method returns ~true~ when extending from ~React.Component~.
+
+You'd only want to override this method for performance optimizations. The
+~shouldComponentUpdate~ method takes in 2 arguments: the next prop and the next
+state. You could manually compare the next props/state against the current, and
+decide whether the component should update based on that. If the method returns
+no, the ~render~ method won't be invoked, and naturally the component will not
+update.
+
+Personally, I'd avoid overriding this method if possible. React also offers a
+[[https://reactjs.org/docs/react-api.html#reactpurecomponent][PureComponent]] class, which is essentially ~Component~ with a /shallow compare/
+implemented in ~shouldComponentUpdate~. If you don't have nested data
+structures, PureComponents are a great way to drop in some quick performance
+optimizations with minimal refactoring.
+
+*** render
+There's not much to describe here really. If the component should update, this
+method is invoked again, and it's the same method that was called during the
+mounting phase.
+
+*** componentDidUpdate
+This method is invoked after a successful update. You'll be able to interact
+with the native UI again here. This is a good time to update the DOM after the
+component has been updated. For example, you may again be using 3rd party
+non-React libraries. Now would be a good time to perform DOM operations with
+them.
+
+** Unmounting
+*** componentWillUnmount
+This method is invoked before an element is unmounted and destroyed. This could
+be because you're navigating somewhere else, so the component doesn't need to be
+rendered any longer. You'll want to use this method for cleanups. Typically,
+this means reversing some setup you did it ~componentDidMount~. For example, you
+might have registered a global event inside ~componentDidMount~, and now is the
+time to unregister it.
+
+** Simple chapter exercise
+DEADLINE: <2018-09-06 Thu>
+Using lifecycle methods isn't difficult, you literally just declare your
+implementation of the method you wish to override. The important part comes
+from knowing *when* to use each lifecycle method. We'll just have a simple
+example, and we won't even need ~create-react-app~. Create a single HTML page,
+and use Browsersync to setup hot reload.
+
+In this exercise, we'll render a map of Singapore, and fetch data from the
+OneMap API about and display the planning area of a location that's clicked.
+We'll use Leaflet[fn::Specifically, a fork of Leaflet maintained by OneMap from
+Singapore Land Authority], a JavaScript interactive map library. Because Leaflet
+does its own DOM manipulation, we won't we able to control that behavior
+directly, so we'll need to interact with the library through lifecycle hooks.
+This won't be particularly sophisticated, but you should get an idea of how to
+interact with the DOM and perform updates in this example.
+
+*** OneMap API registration
+Before we even start writing the code, we'll need a OneMap developer account to
+use the OneMap API. Head over to their [[https://developers.onemap.sg/signup/][registration site]] and create an account.
+
+#+ATTR_HTML: :width 400px
+[[file:onemap-signup.PNG]]
+
+You should receive an email requesting for verification, after which you're able
+to set a password. With that, we can proceed with the code.
+
+*** Initial Setup
+We'll start off the way we did in Chapter 3, with a simple page setup for React:
+#+BEGIN_SRC html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- React scripts -->
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  <title>React Lifecycles</title>
+</head>
+
+<body>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    class App extends React.Component {
+      render() {
+        return (
+          <h1>Hello!</h1>;
+        )
+      }
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+
+</body>
+
+</html>
+#+END_SRC
+
+We'll also need the leaflet library, so add these in the document head:
+#+BEGIN_SRC html
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+<script src="https://cdn.onemap.sg/leaflet/onemap-leaflet.js"></script>
+#+END_SRC
+
+*** Working with the DOM in componentDidMount
+Let's make a component to display a map of Singapore. Unoriginally, I'll name it
+~SingaporeMap~, with a ~render~ method that returns a ~div~ with an id[fn::In
+practise, hardcoding ids into your renders makes them unreusable, as you won't
+be able to have multiple SingaporeMap components with the same id. We're only
+doing this because it is a simple example.] ~mapdiv~.
+#+BEGIN_SRC javascript
+class SingaporeMap extends React.Component {
+  render() {
+    return <div id="mapdiv" style={{ height }} />;
+  }
+}
+#+END_SRC
+
+We need to tell leaflet to render the map into our ~div~ of id ~mapdiv~, and we
+can only do that when we can work with the DOM. Naturally, the lifecycle method
+we would want to use is ~componentDidMount~.
+#+BEGIN_SRC javascript
+componentDidMount() {
+  const { x, y } = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
+  // Create the map on the element with an id of mapdiv
+  const leafletMap = L.map('mapdiv').setView([x, y], 12);
+  // Create a Tile Layer for the map
+  const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+    detectRetina: true,
+    maxZoom: 18,
+    minZoom: 11
+  });
+
+  leafletMap.setMaxBounds([[1.56073, 104.1147], [1.16, 103.502]]);
+
+  // Add the Tile Layer to the map
+  basemap.addTo(leafletMap);
+}
+#+END_SRC
+
+Now we'll change ~App~ to render a ~SingaporeMap~ instead:
+#+BEGIN_SRC diff
+class App extends React.Component {
+  render() {
+    return (
+-      <h1>Hello!</h1>;
++      <SingaporeMap />;
+    )
+  }
+}
+#+END_SRC
+
+You should end up with something like this.
+
+#+ATTR_HTML: :width 500px
+[[file:onemap-first-render.PNG]]
+
+The OneMap API has an endpoint for retrieving a planning area, given a set of
+coordinates. We wanted to retrieve the planning area of a location that's
+clicked, so the first step is retrieving the coordinates of the location
+clicked. Leaflet has a click event listener for the map:
+#+BEGIN_SRC diff
+componentDidMount() {
+  // ...
+
+  leafletMap.setMaxBounds([[1.56073, 104.1147], [1.16, 103.502]]);
++  leafletMap.on('click', ({ latlng }) => {
++    console.log(latlng);
++  });
+
+  basemap.addTo(leafletMap);
+}
+#+END_SRC
+Try clicking on some areas around the map, and some log statements should appear
+in the console.
+
+*** Passing data up
+Of course, we don't want to simply log the coords. We'll pass these coords up to
+~App~, which will handle the API request.
+#+BEGIN_SRC diff
+componentDidMount() {
+  // ...
+
+  leafletMap.setMaxBounds([[1.56073, 104.1147], [1.16, 103.502]]);
+  leafletMap.on('click', ({ latlng }) => {
+-    console.log(latlng);
++    this.props.onLatLng(latlng);
+  });
+
+  basemap.addTo(leafletMap);
+}
+#+END_SRC
+
+So we'll have to pass a prop ~onLatLng~ from ~App~ to ~SingaporeMap~, which
+takes in a ~latlng~ as an argument. Modify ~App~ with the following:
+#+BEGIN_SRC diff
+class App extends React.Component {
+
++  updateClicked = ({ lat, lng }) => {
++    // confirm we've received the data
++    console.log(lat, lng);
++  }
+
+  render() {
+    return (
+-      <SingaporeMap />
++      <SingaporeMap
++        onLatLng={this.updateClicked}
++      />
+    );
+  }
+}
+#+END_SRC
+
+*** Making network requests in componentDidMount
+As again, we don't want to just log the data. We want to send it to OneMap and
+retrieve the planning area data. For making network requests, most browsers
+support the *fetch* API. We'll use that to send a requests to OneMap. There's
+just one little problem: The OneMap API requires you to send an API token which
+each request, which is generated by authenticating with the API, using the email
+and password you registered with. Rather than retrieving that token manually, we
+might as well configure our ~App~ component such that it automatically retrieves
+and stores this token for us in its state. As you may have guessed,
+~componentDidMount~ is once again our lifecycle method for that.
+
+Looking at the [[https://docs.onemap.sg/#authentication-service-post][documentation]], it seems we have to send our email and password
+that we registered with as form data in a POST request. We can construct a
+~FormData~ object and POST that via ~fetch~. For simplicity, we can keep the
+token in the state, although in production you might want to consider persisting
+it somewhere else, e.g. ~localStorage~.
+#+BEGIN_SRC diff
++// I like to store API endpoints as their own variables
++const TOKEN_ENDPOINT = 'https://developers.onemap.sg/privateapi/auth/post/getToken';
+
+class App extends React.Component {
++  state = {
++    token: '',
++  }
+
++  async componentDidMount() {
++    // Construct a form with your email and password
++    const formData = new FormData();
++    formData.append('email', 'your@email.com');
++    formData.append('password', 'YourPassword');
++
++    // Retrieve the response from your request
++    const response = await window.fetch(TOKEN_ENDPOINT, {
++      method: 'post',
++      body: formData,
++    });
++    const json = await response.json();
++
++    // Store the token in the state
++    // The token is in the "access_token" field.
++    // Instead of json['access_token'], we can use json.access_token as well
++    this.setState({ token: json['access_token'] });
++  }
+
+   render() {
+     // ...
+   }
+
+}
+#+END_SRC
+
+*** Setting up the rest
+That token will allow us to invoke the planning area API. Let's update the our
+~updateClicked~ method to request for the planning area, and retrieve the name
+of the planning area, then store it in the state.
+#+BEGIN_SRC diff
+// I like to store API endpoints as their own variables
+const TOKEN_ENDPOINT = 'https://developers.onemap.sg/privateapi/auth/post/getToken';
++const PLANNING_AREA_ENDPOINT = 'https://developers.onemap.sg/privateapi/popapi/getPlanningarea';
+
+class App extends React.Component {
+  state = {
+    token: '',
++    areaName: '',
+  }
+
+
+  // We can use async and await to make it easier to work with the requests
+-  updateClicked = ({ lat, lng }) => {
++  updateClicked = async ({ lat, lng }) => {
+
+-    console.log({ lat, lng });
+
++    // Encode the URI
++    const endpointStr = encodeURI(`${PLANNING_AREA_ENDPOINT}?token=${this.state.token}&lat=${lat}&lng=${lng}`);
+
++    // Wait for the response from the API
++    const response = await window.fetch(endpointStr);
++    const json = await response.json();
++    const areaName = json.map(elem => elem['pln_area_n']).join();
++    console.log(areaName);
++    this.setState({ areaName });
+  }
+
+}
+#+END_SRC
+The API returns the an array of objects with a ~pln_area_n~ field. Going through
+the documentation, it seems to suggest that only a /single planning area/ will
+be retrieved, but since an array of objects is returned [fn::Perhaps they were
+preparing the API for potential cases where certain regions might fall into
+multiple planning areas.], I decided to play it safe and use a ~.join()~ to
+return a single String of all the planning area names.
+
+Try clicking around some areas, and the console should log the area name. Of
+course, that's not very useful, so we'll modify ~App~ to display the
+coordinates, as well as the area name, instead.
+#+BEGIN_SRC diff
+class App extends React.Component {
+  state = {
+    token: '',
+    areaName: '',
++    lat: '',
++    lng: '',
+  }
+
+  updateClicked = async ({ lat, lng }) => {
+    // Encode the URI
+    const endpointStr = encodeURI(`${PLANNING_AREA_ENDPOINT}?token=${this.state.token}&lat=${lat}&lng=${lng}`);
+
+    // Wait for the response from the API
+    const response = await window.fetch(endpointStr);
+    const json = await response.json();
+    const areaName = json.map(elem => elem['pln_area_n']).join();
+-    console.log(areaName);
+-    this.setState({ areaName });
++    this.setState({ areaName, lat, lng });
+  }
+
+  render() {
+    return (
++      <div>
++        <p>Latitude: {this.state.lat}</p>
++        <p>Longitude: {this.state.lng}</p>
++        <p>Area: {this.state.areaName}</p>
+        <SingaporeMap
+          onLatLng={this.updateClicked}
+        />
++      </div>
+    );
+  }
+
+}
+#+END_SRC
+
+This time, the changes should be displayed each time you click on a spot.
+#+ATTR_HTML: :width 400px
+[[file:leaflet-final.png]]
+
+** Conclusion
+And that's it for the exercise. We didn't dive into other lifecycle methods, but
+as long as you understand the different stages of a Component's lifecycle and
+what should be performed inside each lifecycle method, you shouldn't have any
+troubles using them.
 
 * Exercises
-1. Lorem ipsum
+1. At the time of writing (late August 2018), several lifecycle hooks were
+   labelled ~UNSAFE~ and will be deprecated in React 17. [[https://reactjs.org/docs/react-component.html][Look into]] those hooks.
+   What were they? Why are they being deprecated?
+2. Leaflet has a [[https://leafletjs.com/reference-1.3.4.html#popup][popup]] UI layer. Display the name of the planning area at the
+   location that was clicked, using a popup. *Hint*: pass the data required as a
+   prop, and store the map object in the state. Make use of the
+   ~componentDidUpdate~ lifecycle hook as well. Depending on how you structure
+   your state, you might need to handle the initial case where certain fields
+   might be ~null~.
+
+* Footnotes
+
+[fn:Perhaps they were preparing the API for potential cases where certain regions might fall into multiple planning areas.]
+
+[fn:In practise, hardcoding ids into your renders makes them unreusable, as you won't be able to have multiple SingaporeMap components with the same id. We're only doing this because it is a simple example.]

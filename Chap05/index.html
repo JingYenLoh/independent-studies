@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+  <script src="https://cdn.onemap.sg/leaflet/onemap-leaflet.js"></script>
+
+  <title>React Lifecycles</title>
+</head>
+
+<body>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const TOKEN_ENDPOINT = 'https://developers.onemap.sg/privateapi/auth/post/getToken';
+    const PLANNING_AREA_ENDPOINT = 'https://developers.onemap.sg/privateapi/popapi/getPlanningarea';
+
+    // class App extends React.Component {
+    //   state = {
+    //     areaName: null,
+    //     lat: null,
+    //     lng: null,
+    //     token: null,
+    //   }
+
+    //   async componentDidMount() {
+    //     const formData = new FormData();
+    //     formData.append('email', 'neroflux@hotmail.com');
+    //     formData.append('password', 'ZtR9Kr5xkGhgMECIaapazMfT2');
+
+    //     const response = await window.fetch(TOKEN_ENDPOINT, {
+    //       method: 'post',
+    //       body: formData,
+    //     });
+    //     const json = await response.json();
+    //     this.setState({ token: json['access_token'] });
+    //   }
+
+    //   updateClicked = async ({ lat, lng }) => {
+    //     const endpointStr = encodeURI(`${PLANNING_AREA_ENDPOINT}?token=${this.state.token}&lat=${lat}&lng=${lng}`);
+    //     const response = await window.fetch(endpointStr);
+    //     const json = await response.json();
+    //     const areaName = json.map(elem => elem['pln_area_n']).join();
+    //     this.setState({ lat, lng, areaName });
+    //   }
+
+    //   render() {
+    //     return (
+    //       <div>
+    //           {/* <p>Latitude: {this.state.lat}</p>
+    //           <p>Longitude: {this.state.lng}</p>
+    //           <p>Area: {this.state.areaName}</p> */}
+    //         <SingaporeMap
+    //           onLatLng={this.updateClicked}
+    //           areaName={this.state.areaName}
+    //           lat={this.state.lat}
+    //           lng={this.state.lng}
+    //         />
+    //       </div>
+    //     );
+    //   }
+    // }
+    class App extends React.Component {
+      state = {
+        token: null,
+        areaName: 'Nothing selected yet!',
+        lat: 'Nothing selected yet!',
+        lng: 'Nothing selected yet!',
+      }
+
+      async componentDidMount() {
+        const formData = new FormData();
+        formData.append('email', 'neroflux@hotmail.com');
+        formData.append('password', 'ZtR9Kr5xkGhgMECIaapazMfT2');
+
+        const response = await window.fetch(TOKEN_ENDPOINT, {
+          method: 'post',
+          body: formData,
+        });
+        const json = await response.json();
+        this.setState({ token: json['access_token'] });
+      }
+
+      updateClicked = async ({ lat, lng }) => {
+        const endpointStr = encodeURI(`${PLANNING_AREA_ENDPOINT}?token=${this.state.token}&lat=${lat}&lng=${lng}`);
+        const response = await window.fetch(endpointStr);
+        const json = await response.json();
+        const areaName = json.map(elem => elem['pln_area_n']).join();
+        console.log(areaName);
+        this.setState({ lat, lng, areaName });
+      }
+
+      render() {
+        return (
+          <div>
+            <p>Latitude: {this.state.lat}</p>
+            <p>Longitude: {this.state.lng}</p>
+            <p>Area: {this.state.areaName}</p>
+            <SingaporeMap
+              onLatLng={this.updateClicked}
+              areaName={this.state.areaName}
+            />
+          </div>
+        );
+      }
+    }
+
+    class SingaporeMap extends React.Component {
+      state = {
+        leafletMap: null,
+        popup: null,
+        latlng: null,
+      }
+
+//      componentDidMount() {
+//        const { x, y } = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
+//        this.setState({ leafletMap: L.map('mapdiv').setView([x, y], 12) }, () => {
+//          const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+//            detectRetina: true,
+//            maxZoom: 18,
+//            minZoom: 11
+//          });
+//
+//          this.state.leafletMap.setMaxBounds([[1.56073, 104.1147], [1.16, 103.502]]);
+//          this.state.leafletMap.on('click', ({ latlng }) => {
+//            this.setState({ latlng });
+//            this.props.onLatLng(latlng);
+//          });
+//
+//          this.state.popup = L.popup();
+//
+//          basemap.addTo(this.state.leafletMap);
+//        });
+//      }
+
+componentDidMount() {
+  const { x, y } = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
+  const leafletMap = L.map('mapdiv').setView([x, y], 12);
+  const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+    detectRetina: true,
+    maxZoom: 18,
+    minZoom: 11
+  });
+
+  leafletMap.setMaxBounds([[1.56073, 104.1147], [1.16, 103.502]]);
+  leafletMap.on('click', ({ latlng }) => {
+    console.log(latlng);
+    this.props.onLatLng(latlng);
+  });
+
+  basemap.addTo(leafletMap);
+}
+
+//      componentDidUpdate() {
+//        if (this.state.latlng) {
+//          this.state.popup
+//            .setLatLng(this.state.latlng)
+//            .setContent(this.props.areaName)
+//            .openOn(this.state.leafletMap);
+//        }
+//      }
+
+      render() {
+        return <div id="mapdiv" style={{ height: 800 }} />;
+      }
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+
+</body>
