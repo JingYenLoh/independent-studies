@@ -1,0 +1,230 @@
+#+TITLE: Chapter06
+#+SUBTITLE: React Native Introduction
+#+AUTHOR: Jing Yen Loh
+#+EMAIL: lohjingyen.16@ichat.sp.edu.sg
+#+DATE: September 2018
+
+* Learning Objectives
+- [X] Introduce basic/common React Native components
+  - [X] View
+  - [X] Text
+  - [X] Image
+  - [X] ScrollView
+  - [X] Lists
+- [X] Introduce styling in React Native
+
+* React Native
+With that, we've come to the meat of this Independent Studies: React Native(RN).
+You might be wondering why the last few chapters were all about React, rather
+than RN. That's because the programming model for RN is the same as React on the
+web, and understanding the props, state, and lifecycles are fundamental whether
+you're doing React on the web or mobile.
+
+In this chapter, I'll give a high level overview of frequently used React Native
+components, as well as touch on styling. After some consideration, I've decided
+to keep this chapter short, with no exercises. Instead, you should skim through
+the [[https://facebook.github.io/react-native/docs/getting-started][official docs]], which will go into more details.
+
+** Common components
+*** View
+A ~View~ is the most fundamental UI building block for React Native. Under the
+hood, Views map to the native view equivalent on whatever platform React Native
+is running on, e.g. ~UIView~ on iOS, or ~android.view~ on Android, all of which
+are generic UI building blocks on their respective platforms.
+
+~View~ is commonly used to contain other components, and you'll often use it to
+wrap other ~View~ components. Sometimes, many ~View~s are composed together to
+form a more complex component. Views can also handle some touch events.
+
+Example from RN docs:
+#+BEGIN_SRC javascript
+class ViewColoredBoxesWithText extends Component {
+  render() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          height: 100,
+          padding: 20,
+        }}>
+        <View style={{backgroundColor: 'blue', flex: 0.3}} />
+        <View style={{backgroundColor: 'red', flex: 0.5}} />
+        <Text>Hello World!</Text>
+      </View>
+    );
+  }
+}
+#+END_SRC
+
+You'll want to check the [[https://facebook.github.io/react-native/docs/view.html][View docs]] for more information.
+*** Text
+A generic component for rendering all forms of text. Unlike HTML, the ~Text~
+component is necessary for displaying text.
+
+#+BEGIN_SRC javascript
+import React, { Component } from 'react';
+import { AppRegistry, View, Text, StyleSheet } from 'react-native';
+
+export default class App extends Component {
+  render() {
+    return (
+      <View style={{flex: 1,}}>
+        <Text style={{
+          color: 'red',
+          fontSize: 16,
+          padding: 10,
+        }}>Hello!</Text>
+      </View>
+    );
+  }
+}
+
+AppRegistry.registerComponent('App', () => App);
+#+END_SRC
+
+You could create reusable ~Text~ components that follow a certain style:
+#+BEGIN_SRC javascript
+const HeadingText = props => (
+  <Text style={{
+    fontSize: 24,
+    fontWeight: 'bold',
+  }}>
+    {children}
+  </Text>
+);
+
+const SubHeadingText = props => (
+  <Text style={{
+    fontSize: 20,
+    fontWeight: 'bold',
+  }}>
+    {children}
+  </Text>
+);
+#+END_SRC
+
+Check out [[https://facebook.github.io/react-native/docs/text][Text documentation]], as usual.
+
+*** Image
+Displaying images is a common operation, and ~Image~ supports both static
+bundled assets, or images fetched over a network.
+
+To display a bundled image, reference the image using the ~require~ function (at
+the time of writing, ~import~ is not yet supported for this case):
+#+BEGIN_SRC javascript
+<Image source={require('./path/to/your/image.png')} />
+#+END_SRC
+
+For images loaded over a network, pass an object with a ~uri~ to the ~source~
+prop instead. Unlike HTML ~img~ tags, it is necessary to specify the dimensions
+for images retrieved through the web.
+#+BEGIN_SRC javascript
+<Image
+  source={{ uri: 'https://via.placeholder.com/350x150' }}
+  style={{ height: 150, width: 350 }}
+/>
+#+END_SRC
+
+Check out the section on [[https://facebook.github.io/react-native/docs/images][Images]], including a subsection on [[https://facebook.github.io/react-native/docs/images#background-image-via-nesting][background images.]]
+
+*** ScrollView
+A ~ScrollView~ is a container for scrollable content. It can hold multiple
+components and views. Different components can be placed in a single
+~ScrollView~; they need not be the same type. The [[https://facebook.github.io/react-native/docs/using-a-scrollview][docs]] has an intro to
+~ScrollView~, I'd recommend reading that instead.
+*** List
+Displaying collections of data is a very common use case in mobile apps. At the
+time of writing, there are two recommended components for working with lists:
+[[https://facebook.github.io/react-native/docs/flatlist][FlatList]] and [[https://facebook.github.io/react-native/docs/sectionlist][SectionList]]. Again, instead of rephrasing them, I'd like to
+redirect you to the [[https://facebook.github.io/react-native/docs/sectionlist][introduction]] for List Views.
+
+** Styling
+Styling in React Native is interesting. Similar to the React on web, most React
+Native components accept a ~style~ prop. However, previously in
+~create-react-app~, we saw that we could import CSS files from a JavaScript
+file, and under the hood CRA would bundle the styles up into a single CSS file.
+React Native uses rendering engine called [[https://yogalayout.com/][Yoga]]. Yoga supports only a subset of
+CSS rules.
+
+To style a component, we could simply pass an object to the ~style~ prop.
+#+BEGIN_SRC javascript
+export default class SampleStyling extends Component {
+  render() {
+    return (
+      <View>
+        <Text style={{ color: 'red', fontSize: 24, fontWeight: 'bold' }}>
+          I'm big, red, and bold!
+        </Text>
+      </View>
+    );
+  }
+}
+#+END_SRC
+
+However, RN recomments using ~Stylesheet.create~ to create a styles object in
+one place. Here's an example lifted directly from their documentation.
+#+BEGIN_SRC javascript
+import React, { Component } from 'react';
+import { AppRegistry, StyleSheet, Text, View } from 'react-native';
+
+export default class LotsOfStyles extends Component {
+  render() {
+    return (
+      <View>
+        <Text style={styles.red}>just red</Text>
+        <Text style={styles.bigblue}>just bigblue</Text>
+        <Text style={[styles.bigblue, styles.red]}>bigblue, then red</Text>
+        <Text style={[styles.red, styles.bigblue]}>red, then bigblue</Text>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  bigblue: {
+    color: 'blue',
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
+  red: {
+    color: 'red',
+  },
+});
+
+// skip this line if using Create React Native App
+AppRegistry.registerComponent('AwesomeProject', () => LotsOfStyles);
+#+END_SRC
+
+Notice that the styles are all encapsulated in one ~styles~ object, and
+individual components reference a specific style in the object. This is not
+unlike the ~import './Component.css'~ pattern that came out of the box in
+~create-react-app~, except this is an object and it's (typically) placed at the
+bottom of a Component file.
+
+You could also create a ~StyleSheet~ object which defines many commonly used
+styles, and then import it from many different components, improving code reuse.
+
+*** Flexbox
+For layouts, React Native doesn't support CSS grids, or floats. Instead, it uses
+the flexbox algorithm, which mostly works similar to the Flexbox specification
+on the web.
+
+#+BEGIN_QUOTE
+Flexbox works the same way in React Native as it does in CSS on the web, with a
+few exceptions. The defaults are different, with flexDirection defaulting to
+column instead of row, and the flex parameter only supporting a single number.
+#+END_QUOTE
+
+Check out the [[https://facebook.github.io/react-native/docs/flexbox][introduction]] for Flexbox, as well as the [[https://facebook.github.io/react-native/docs/layout-props][layout props]] in depth.
+Notice that for the code samples on the introduction, they style a ~View~ to
+layout the content within it. That's one of the primary uses of a ~View~.
+
+It's important that you get comfortable with flexbox, as you might end up using
+it to compose rather complex layouts.
+
+And that's all I have for this chapter.
+
+* Exercises
+None! Now is the perfect time to skim through React Native documentation :)
+
+* Footnotes
